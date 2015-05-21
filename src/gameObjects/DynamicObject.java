@@ -1,8 +1,10 @@
 package gameObjects;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import polygons.Impulse;
 import polygons.Point;
 import polygons.Vector;
 import gameActions.ControlScheme;
@@ -13,37 +15,40 @@ import gameReferee.Referee;
 public abstract class DynamicObject extends GameObject{
 	public Vector vel;
 	public Point position;
-	
-//	public float x;
-//	public float y;
 
 	public ControlScheme cScheme;
 
 	public double mass;
-	public Vector impulse;
+	public List<Impulse> impulses;
 	public Vector force;
+
+	public double rotationalVel;
 
 	public double restitution;
 
-
-	public DynamicObject(Referee ref, GameApplet gApp, float x, float y, ControlScheme cScheme) {
+	public double termVel;
+	public double rotTermVel;
+	
+	public DynamicObject(Referee ref, GameApplet gApp, double x, double y, ControlScheme cScheme) {
 		super(ref, gApp);
 
 		this.cScheme = cScheme;
 
-		this.impulse = new Vector(0,0);
+		this.impulses = new ArrayList<Impulse>();
 		this.force = new Vector(0,0);
-		
+
 		//STUFF TO SET LATER
-		this.mass = 1.0; 
-		this.restitution = .91;
+		this.mass = 100; 
+		this.restitution = .94;
 		this.position = new Point(x, y);
 		this.vel = new Vector(0, 0);
-
+		this.termVel = 10;
+		this.rotTermVel = 1;
 	}	
 
-	public void applyImpulse(Vector iImpulse) {
-		this.impulse = impulse.add(iImpulse);
+	public void applyImpulse(Impulse iImpulse) {
+		this.impulses.add(iImpulse);
+	
 	}
 
 	public void applyForce(Vector iForce) {
@@ -54,12 +59,27 @@ public abstract class DynamicObject extends GameObject{
 		this.applyForce(this.ref.gravity);
 
 		this.vel = this.vel.add(this.force.timesScalar(t));
-		this.vel = this.vel.add(this.impulse.timesScalar(1.0/this.mass));
+		
+		for (Impulse impulse : this.impulses) {
+			impulse.executeImpulse();
+		}
+		
+		this.rotate(this.rotationalVel);
 		this.translate(this.vel.timesScalar(t));
 
-		this.vel = this.vel.timesScalar(this.ref.moveResistance);;
+		//Terminal velocity
+		if (this.vel.getLength() > this.termVel) {
+			this.vel.setLength(this.termVel);
+		}
+		if (Math.abs(this.rotationalVel) > this.rotTermVel) {
+			this.rotationalVel = this.rotTermVel*Math.signum(this.rotationalVel);
+		}
 
-		this.impulse = new Vector(0,0);
+		this.vel = this.vel.timesScalar(this.ref.moveResistance);
+		this.rotationalVel *= this.ref.moveResistance;
+		
+		
+		this.impulses = new ArrayList<Impulse>();
 		this.force = new Vector(0,0);
 	}
 
@@ -68,6 +88,8 @@ public abstract class DynamicObject extends GameObject{
 	}	
 	protected void translate(Vector v) {
 		this.position = this.position.add(v);
+	}
+	protected void rotate(double v) {
 	}
 
 	public void fixCollisions() {
@@ -80,19 +102,19 @@ public abstract class DynamicObject extends GameObject{
 
 	protected abstract void fixCollision(DynamicObject dOb);
 
-	float lastX = 0;
-	float lastY = 0;
+	double lastX = 0;
+	double lastY = 0;
 
 	public void destroyObject() {
 		this.ref.gameObjects.remove(this);
 	}
-	
+
 	public void fixNANS() {
 		if (Double.isNaN(this.vel.x) || Double.isNaN(this.vel.y)){
 			this.destroyObject();
 		}
 	}
-	
+
 	@Override
 	public void update(List<Character> pressedKeys) {
 
@@ -108,22 +130,22 @@ public abstract class DynamicObject extends GameObject{
 
 		//Wrap around
 		if (this.position.x >= this.gApp.width)  {
-			
-			this.translate(new Vector(-(1+this.position.x), 0));
-//			this.vel.x *= -1;
+
+			this.translate(new Vector(-(this.position.x), 0));
+			//			this.vel.x *= -1;
 		}
 		else if (this.position.x < 0) {
 			this.translate(new Vector(-this.position.x + gApp.width-1, 0));
-//			this.vel.x *= -1;
+			//			this.vel.x *= -1;
 		}
 		if (this.position.y >= this.gApp.height)  {
-			
+
 			this.translate(new Vector(0, -(this.position.y)));
-//			this.vel.y *= -1;
+			//			this.vel.y *= -1;
 		}
 		else if (this.position.y < 0) {
 			this.translate(new Vector(0, -this.position.y+ gApp.height-1));
-//			this.vel.y *= -1;
+			//			this.vel.y *= -1;
 
 		}
 

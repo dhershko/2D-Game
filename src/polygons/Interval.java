@@ -18,8 +18,8 @@ public class Interval {
 		this.max = Math.max(min, max);
 	}
 	
-	public Interval getOverlap(Interval other) {
-		return new Interval(Math.min(min, other.min), Math.max(max, other.max));
+	public Interval getOverlap(Interval other) {		
+		return new Interval(Math.max(min, other.min), Math.min(max, other.max));
 	}
 	
 	public boolean contains(Double point) {
@@ -35,6 +35,11 @@ public class Interval {
 		    return thisRight;
 		  }
 		   return -thisLeft;	
+	}
+	
+	@Override
+	public String toString() {
+		return "Interval from " + this.min + " to " + this.max;
 	}
 	
 }

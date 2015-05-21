@@ -86,6 +86,15 @@ public class Polygon extends Shape {
 //		return toReturn;
 //	}
 
+	public List<Vector> getVerticesVectorsRelativeToCent() {
+		List<Vector> toReturn = new ArrayList<Vector>();
+		for (Point p : this.points) {
+			toReturn.add(p.getThisPointRelativeTo(this.position).toVector());
+		}
+		
+		
+		return toReturn;
+	}
 
 	public List<Line> toLines() {
 		List<Line> toReturn = new ArrayList<Line>();
@@ -178,7 +187,7 @@ public class Polygon extends Shape {
 		}
 		gApp.endShape(gApp.CLOSE);
 		gApp.popMatrix();
-		this.position.render(gApp);;
+//		this.position.render(gApp);;
 	}
 
 
@@ -234,24 +243,34 @@ public class Polygon extends Shape {
 	public List<Point> getPointsOfCollison(Shape other, Vector MTV) {
 				
 		List<Point> toReturn = new ArrayList<Point>();
-		
-		Line thisProj = this.projectOntoVector(MTV);
-		Interval thisInter = new Interval(thisProj, MTV);
-		
-		Line oProj = other.projectOntoVector(MTV);
-		Interval oInter = new Interval(oProj, MTV);
-		
-		Interval overlapInterval = thisInter.getOverlap(oInter);
-		
+				
 		for (Point v : this.points) {
-			Double pointOnInterval = v.toIntervalPoint(MTV);
-			if (overlapInterval.contains(pointOnInterval)) {
+			ShapePoint sP = v.toShapePoint();
+			if (sP.isCollidingWith(other)) {
 				toReturn.add(v);
 			}
 		}
 		
 		return toReturn;
 		
+	}
+
+	@Override
+	protected double getInertia() {
+		double toReturn = 0;
+		double num = 0;
+		double den = 0;
+		List<Vector> verts =  this.getVerticesVectorsRelativeToCent();
+		for (int i = 0; i < verts.size(); i++) {
+			Vector v1 = verts.get(i);
+			Vector v2 = verts.get((i+1)%verts.size());
+			num += (v1.getLength() + v1.dotProduct(v2) + v2.getLength())*(v1.times(v2));
+			den += v1.times(v2);
+		}
+		toReturn += num;
+		toReturn *= 1.0/den;
+		toReturn *= this.mass/6.0;
+		return toReturn;
 	}
 
 

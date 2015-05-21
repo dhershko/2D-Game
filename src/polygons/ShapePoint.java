@@ -8,8 +8,14 @@ import gameReferee.GameApplet;
 import gameReferee.Referee;
 import processing.core.PApplet;
 
-public class Point {
-	public  Point(double x, double y) {
+public class ShapePoint extends Shape {
+	public ShapePoint(Referee ref, GameApplet gApp, float x, float y,
+			ControlScheme cScheme) {
+		super(ref, gApp, x, y, cScheme);
+	}
+	
+	public  ShapePoint(double x, double y) {
+		super(null, null, x, y, null);
 		this.x = x;
 		this.y = y;
 	}
@@ -17,6 +23,9 @@ public class Point {
 	public double x;
 	public double y;
 
+	public Point toPoint() {
+		return new Point(this.x, this.y);
+	}
 
 
 	public Vector toVector() {
@@ -31,10 +40,6 @@ public class Point {
 		return new Point(this.x - other.x, this.y - other.y);
 	}
 
-	public ShapePoint toShapePoint() {
-		return new ShapePoint(this.x, this.y);
-	}
-	
 	public double distanceTo(Point otherPoint) {
 		return Math.sqrt(Math.pow(this.x-otherPoint.x,2) + Math.pow(this.y-otherPoint.y,2));
 	}
@@ -45,7 +50,7 @@ public class Point {
 	}
 
 	public double toIntervalPoint(Vector vec) {
-		Line l = new Line(this, this);
+		Line l = new Line(this.toPoint(), this.toPoint());
 		Interval i = new Interval(l, vec);
 		return i.min;
 	}
@@ -71,6 +76,7 @@ public class Point {
 	}
 	
 	public void render(GameApplet gApp) {
+		gApp.stroke(1, 255, 1);
 		gApp.pushMatrix();
 
 		
@@ -84,4 +90,37 @@ public class Point {
 
 	}
 
+	@Override
+	protected Line projectOntoVector(Vector toProjectOnto) {
+		Point projection =  this.toVector().getProjection(toProjectOnto).toPoint();
+		return new Line(projection, projection);
+	}
+
+	@Override
+	protected List<Vector> getCollisionAxis(Shape other) {
+		List<Vector> toReturn = new ArrayList<Vector>();
+		return toReturn;
+	}
+
+	@Override
+	protected Point getCentroid() {
+		return this.toPoint();
+	}
+
+	@Override
+	public void rotate(double theta) {
+	}
+
+	@Override
+	public List<Point> getPointsOfCollison(Shape other, Vector MTV) {
+		// TODO Auto-generated method stub
+		List<Point> toReturn = new ArrayList<Point>();
+		toReturn.add(this.toPoint());
+		return toReturn;
+	}
+
+	@Override
+	protected double getInertia() {
+		return 0;
+	}
 }

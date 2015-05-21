@@ -19,7 +19,7 @@ public class Referee {
 	//public StaticObject [][] gameGrid;
 	public List<GameObject> gameObjects;
 	public List<GameAction> gameActionsToExecute;
-	public float moveResistance = (float) .95;
+	public float moveResistance = (float) .99;
 
 	public Vector gravity;
 
@@ -72,11 +72,11 @@ public class Referee {
 		points.add(new Point(-30, -55));
 		points.add(new Point(-50, 5));
 
-		double randomVelMag = 1;
+		double randomVelMag = 5;
 
-		addGameObject(new Polygon(this, procApp,GameActionHelpers.getWASDMovementScheme(), 0, 0,  5, 50));
-		for(int i = 0; i < 1; i++) {
-			Polygon toAdd = new Polygon(this, procApp,null, procApp.random(procApp.width), procApp.random(procApp.height),  5, 50);
+		addGameObject(new Polygon(this, procApp,GameActionHelpers.getWASDMovementScheme(), 0, 0,  5, 20));
+		for(int i = 0; i < 50; i++) {
+			Polygon toAdd = new Polygon(this, procApp,null, procApp.random(procApp.width), procApp.random(procApp.height),  5, 20);
 
 			double randomTheta = this.procApp.random((float)Math.PI*2);
 			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
@@ -114,11 +114,8 @@ public class Referee {
 	 * concave polygons
 	 * effects
 	 * 
-	 * centroid
-	 * point of collision
-	 * rotation
 	 * 
-	 * Fix speed overlflow bug
+	 * Fix speed overflow bug
 	 * 
 	 */
 }

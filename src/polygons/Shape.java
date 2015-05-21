@@ -10,7 +10,9 @@ import java.util.List;
 
 public abstract class Shape extends DynamicObject {
 
-	public Shape(Referee ref, GameApplet gApp, float x, float y,
+	
+	
+	public Shape(Referee ref, GameApplet gApp, double x, double y,
 			ControlScheme cScheme) {
 		super(ref, gApp, x, y, cScheme);
 	}
@@ -19,8 +21,11 @@ public abstract class Shape extends DynamicObject {
 
 	protected abstract List<Vector> getCollisionAxis(Shape other);
 
+	protected abstract double getInertia();
+	
 	protected abstract Point getCentroid();
 	
+	@Override
 	public abstract void rotate(double theta);
 
 	public abstract void render(GameApplet gApp);
@@ -38,18 +43,20 @@ public abstract class Shape extends DynamicObject {
 	
 	public Point getPointOfCollison(Shape other, Vector MTV) {
 		List<Point> pointsOfCollision = this.getPointsOfCollison(other, MTV);
-		pointsOfCollision.addAll(other.getPointsOfCollison(other, MTV));
+		pointsOfCollision.addAll(other.getPointsOfCollison(this, MTV));
 		
-		double pointX = 0;
-		double pointY = 0;
+		double pointX = 0.0;
+		double pointY = 0.0;
+		
+		
 		
 		for (Point p : pointsOfCollision) {
 			pointX += p.x;
 			pointY += p.y;
 		}
 		
-		pointX *= 1/pointsOfCollision.size();
-		pointY *= 1/pointsOfCollision.size();
+		pointX *= 1.0/pointsOfCollision.size();
+		pointY *= 1.0/pointsOfCollision.size();
 		
 		return new Point(pointX, pointY);
 		
@@ -93,7 +100,7 @@ public abstract class Shape extends DynamicObject {
 	}
 
 	public boolean isCollidingWith(Shape other) {
-		return (this.collisionMTV(other) == null);
+		return (this.collisionMTV(other) != null);
 	}
 
 	public Vector collisionMTV(Shape other) {
@@ -123,38 +130,29 @@ public abstract class Shape extends DynamicObject {
 				
 				
 				//RENDER POINT OF COLLISION
-				if (this.cScheme != null) {
 					Point pointOfCollision = getPointOfCollison(oShape, MTV);
-					this.gApp.stroke(255, 1, 1);
-					pointOfCollision.render(gApp);
-					this.gApp.stroke(1, 255, 1);
-					System.out.println(pointOfCollision);
-
-
-				}
-				
-//				Vector thisProjVel = this.vel.getProjection(MTV);
-//				Vector otherProjVel = oShape.vel.getProjection(MTV);
-//				
-//				Double percentInMTVDir = thisProjVel.getLength()/(thisProjVel.getLength()+otherProjVel.getLength());
-//				
-//				Vector MTVInDir = MTV.timesScalar(percentInMTVDir);
-//				Vector MTVOtherDir = MTV.timesScalar(-1.0*(1.0-percentInMTVDir));
-//				this.translate(MTVInDir);
-//				oShape.translate(MTVOtherDir);
-//
-//				Double COR = this.coefficentOfRestitution(oShape);
-//
-//				Double velChangeScalar = this.mass*oShape.mass*(1+COR)/(this.mass+oShape.mass);
-//	
-//				Vector thisImpulse = otherProjVel.minus(thisProjVel).timesScalar(velChangeScalar);
-//
-//				Vector oImpulse = thisProjVel.minus(otherProjVel).timesScalar(velChangeScalar);
-//				
-//				this.applyImpulse(thisImpulse);
-//				oShape.applyImpulse(oImpulse);
-
+//					this.gApp.stroke(255, 1, 1);
+//					pointOfCollision.render(gApp);
+//					this.gApp.stroke(1, 255, 1);
 			
+				Impulse impulse = new Impulse(pointOfCollision, MTV, this, oShape);
+				Impulse oImpulse = new Impulse(pointOfCollision, MTV, oShape, this);
+
+				this.applyImpulse(impulse);
+				oShape.applyImpulse(oImpulse);
+				
+				
+				//Move objects of one another
+
+				Vector thisProjVel = this.vel.getProjection(MTV);
+				Vector otherProjVel = oShape.vel.getProjection(MTV);
+				
+				Double percentInMTVDir = thisProjVel.getLength()/(thisProjVel.getLength()+otherProjVel.getLength());
+
+				Vector MTVInDir = MTV.timesScalar(percentInMTVDir);
+				Vector MTVOtherDir = MTV.timesScalar(-1.0*(1.0-percentInMTVDir));
+				this.translate(MTVInDir.timesScalar(1.1));
+				oShape.translate(MTVOtherDir.timesScalar(1.1));
 			}
 		}
 

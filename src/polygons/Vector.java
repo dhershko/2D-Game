@@ -20,12 +20,22 @@ public class Vector {
 		return new Vector(this.x + vect.x, this.y + vect.y);
 	}
 	
+	public void setLength(double length) {
+		Vector newS = this.getUnitVector().timesScalar(length);
+		this.x = newS.x;
+		this.y = newS.y;
+	}
+	
 	public Vector minus(Vector vect) {
 		return new Vector(this.x- vect.x, this.y - vect.y);
 	}
 
 	public double getLength() {
 		return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+	}
+	
+	public double times(Vector o) {
+		return this.x*o.y-o.x*this.y;
 	}
 
 	public double dotProduct(Vector other) {
