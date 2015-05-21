@@ -12,6 +12,8 @@ import processing.core.PApplet;
 
 public class Polygon extends Shape {
 
+	private List<Point> points;
+
 	/**
 	 * 
 	 * @param ref
@@ -31,13 +33,9 @@ public class Polygon extends Shape {
 				e.printStackTrace();
 			}	
 		}
+		
+		this.setPositionToCentroid();
 	}
-
-
-	private List<Point> points;
-
-
-
 
 	public Polygon(Referee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, int numPoints, double radius) {
 		super(ref, gApp, x, y, cScheme);
@@ -45,44 +43,55 @@ public class Polygon extends Shape {
 
 		//Get vertices
 		float angle = (float) (Math.PI*2 / numPoints);
-			for (float a = 0; a < Math.PI*2; a += angle) {
-				
-				float random = (float) (gApp.random((float) .5) + .5);
-				
-				float vertX = (float) (Math.cos(a) * radius * random);
-				float vertY = (float) (Math.sin(a) * radius * random);
-				points.add(new Point(vertX, vertY));
+		for (float a = 0; a < Math.PI*2; a += angle) {
+
+			float random = (float) (gApp.random((float) .5) + .5);
+
+			float vertX = (float) (Math.cos(a) * radius * random);
+			float vertY = (float) (Math.sin(a) * radius * random);
+			points.add(new Point(x+vertX, y+vertY));
 		}
 
-
-
-		if (points.size() < 2)
+		if (points.size() < 2) {
 			try {
 				throw new TooFewPointsForPolygonException();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-
-	}
-
-
-
-	public List<Point> getPointsInAbsoluteSpace() {
-		List<Point> toReturn = new ArrayList<Point>();
-		for (Point p: this.points) {
-			toReturn.add(new Point(p.x + x, p.y + y));
 		}
-		return toReturn;
+		
+		this.setPositionToCentroid();
+
+
 	}
+
+	private void setPositionToCentroid() {
+		Point centroid = this.getCentroid();
+		this.position = centroid;
+	}
+
+//	public List<Point> getVerticesInAbsolute() {
+//		List<Point> toReturn = new ArrayList<Point>();
+//		for (Point p: points) {
+//			toReturn.add(new Point(this.position.x + p.x, this.position.y + p.y));
+//		}
+//		return toReturn;
+//	}
+//
+//	public static List<Point> getPointsInOffsetInSpace(List<Point> points, double xCenter, double yCenter) {
+//		List<Point> toReturn = new ArrayList<Point>();
+//		for (Point p: points) {
+//			toReturn.add(new Point(xCenter + p.x, yCenter + p.y));
+//		}
+//		return toReturn;
+//	}
 
 
 	public List<Line> toLines() {
-		List<Point> pointsInAbsSpace = getPointsInAbsoluteSpace();
 		List<Line> toReturn = new ArrayList<Line>();
-		for (int i = 0; i < pointsInAbsSpace.size(); i ++) {
-			Point p1 = pointsInAbsSpace.get(i);
-			Point p2 = pointsInAbsSpace.get((i+1)%pointsInAbsSpace.size());
+		for (int i = 0; i < this.points.size(); i ++) {
+			Point p1 = this.points.get(i);
+			Point p2 = this.points.get((i+1)%this.points.size());
 
 			Line toAdd = new Line(p1, p2);
 			toReturn.add(toAdd);
@@ -93,11 +102,10 @@ public class Polygon extends Shape {
 
 
 	public List<Vector> toVectors() {
-		List<Point> pointsInAbsSpace = getPointsInAbsoluteSpace();
 		List<Vector> toReturn = new ArrayList<Vector>();
-		for (int i = 0; i < pointsInAbsSpace.size(); i ++) {
-			Point p1 = pointsInAbsSpace.get(i);
-			Point p2 = pointsInAbsSpace.get((i+1)%pointsInAbsSpace.size());
+		for (int i = 0; i < this.points.size(); i ++) {
+			Point p1 = this.points.get(i);
+			Point p2 = this.points.get((i+1)%this.points.size());
 
 			Vector toAdd = new Vector(p1.x-p2.x, p1.y-p2.y);
 			toReturn.add(toAdd);
@@ -115,6 +123,7 @@ public class Polygon extends Shape {
 		return toReturn;
 	}
 
+	@Override
 	public Line projectOntoVector(Vector vec) {
 		List<Line> lines = this.toLines();
 		return projectLinesOntoVector(lines, vec);
@@ -122,7 +131,7 @@ public class Polygon extends Shape {
 
 
 
-	public static Line projectLinesOntoVector(List<Line> lines, Vector vec) {
+	public Line projectLinesOntoVector(List<Line> lines, Vector vec) {
 		List<Line> projectedLines = new ArrayList<Line>();
 
 		//Project all lines
@@ -151,114 +160,98 @@ public class Polygon extends Shape {
 			}
 		}
 
+		if (smallerPoint == null) {
+//			System.out.println(this.points);
+//			System.out.println(vec);
+		}
 
 		return new Line(smallerPoint, largerPoint);
 	} 
 
-//	boolean collidingWith(Polygon other) {
-//		if (this == other) return false;
-//
-//		List<Vector> axisVectors = getPerpVectors(this.toVectors());
-//		axisVectors.addAll(getPerpVectors(other.toVectors()));
-//		//						if (ref.players.get(0) == this) {
-//		//							int i = 0;
-//		//							for(Vector axis : axisVectors) {
-//		//								Line thisProjected = this.projectOntoVector(axis);
-//		//								Line otherProjected = other.projectOntoVector(axis);
-//		//								thisProjected.render(gApp, i*10, i*10);
-//		//								otherProjected.render(gApp, i*10, i*10);
-//		//				//				System.out.println("thisProj: "+ thisProjected);
-//		//				//				System.out.println("thatProj: "+ otherProjected);
-//		//				
-//		//								i++;
-//		//							}
-//		//						}
-//		for (Vector axis : axisVectors) {
-//
-//			Line thisProjected = this.projectOntoVector(axis);
-//			Line otherProjected = other.projectOntoVector(axis);
-//
-//			if (!thisProjected.overlapsLineAlongAxis(otherProjected, axis)){
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-
-//	@Override
-//	public Vector getMTV(Shape oShape) {
-//
-//		Polygon other = (Polygon) oShape;
-//		
-//		List<Vector> allAxisVectors = getPerpVectors(this.toVectors());
-//		allAxisVectors.addAll(getPerpVectors(other.toVectors()));
-//
-//		double MTVMag = Double.MAX_VALUE;
-//		Vector MTV = null;
-//		Vector usedAxis = null;
-//
-//		for (Vector axis : allAxisVectors) {
-//			Line thisProjected = this.projectOntoVector(axis);
-//			Line otherProjected = other.projectOntoVector(axis);
-//
-//			Double currentMag = thisProjected.MTVScalar(axis, otherProjected);
-//
-//			if (currentMag == null) return null;
-//			
-//			//RENDER VECTORS FOR PLAYER
-//			
-//			//Render potential MTV vectors
-//			if (this.cScheme != null)  {
-//				gApp.stroke(255, 1, 1);
-//				axis.getUnitVector().timesScalar(currentMag).render(gApp, x, y);
-//				gApp.stroke(1, 255, 1);
-//			}
-//			
-//			if (Math.abs(currentMag) < Math.abs(MTVMag)) {
-//				MTVMag = currentMag;
-//				MTV = axis.getUnitVector();
-//				usedAxis= axis;
-//			}
-//
-//			//			if (this == this.ref.players.get(0)) MTV.timesScalar(MTVMag).render(gApp, xPos, yPos);;
-//		}
-//
-//		if (this.cScheme != null) MTV.timesScalar(MTVMag).render(gApp, x, y);
-//
-//
-//		return MTV.timesScalar(MTVMag);
-//	}
-	
-	
-	//	public void removeCollision(Polygon other) {
-	//		Vector MTV = this.getMTV(other);
-	//
-	//		if (this == this.ref.players.get(0)) this.translate(MTV.x, MTV.y);
-	//	}
 
 	@Override
 	public void render(GameApplet gApp) {
 		gApp.pushMatrix();
-
-		//		for(Player p : this.ref.players) {
-		//			if (this.collidingWith((Polygon) p)) {
-		//				gApp.stroke(255, 1, 1);
-		//			}
-		//		}
-		gApp.translate(x, y);
 		gApp.beginShape();
 		for (Point point : this.points) {
 			gApp.vertex(point.x, point.y);
 		}
 		gApp.endShape(gApp.CLOSE);
 		gApp.popMatrix();
-
+		this.position.render(gApp);;
 	}
 
 
 	@Override
 	protected List<Vector> getCollisionAxis(Shape other) {
-		return getPerpVectors(this.toVectors());
+		List<Vector> vectors = this.toVectors();
+		return getPerpVectors(vectors);
+	}
+
+	@Override
+	protected Point getCentroid() {
+		double cX = 0;
+		double cY = 0;
+		double A = 0;
+
+		for (int i = 0; i < this.points.size(); i ++) {
+			Point p1 = this.points.get(i);
+			Point p2 = this.points.get((i+1)%this.points.size());
+
+			cX += (p1.x + p2.x) * (p1.x*p2.y-p2.x*p1.y);
+			cY += (p1.y+p2.y)*(p1.x*p2.y-p2.x*p1.y);
+			
+			A += p1.x*p2.y - p2.x*p1.y;
+		}
+		A *= 1.0/2.0;
+		
+		cX *= 1/(6*A);
+		cY *= 1/(6*A);
+		Point toReturn = new Point(cX, cY);
+		return toReturn;
+	}
+	
+	@Override
+	public void translate(Vector vec) {
+		this.position.translate(vec);
+		for(Point vert : this.points) {
+			vert.translate(vec);
+		}
+		
+	}
+
+	@Override
+	public void rotate(double theta) {
+				
+		for (Point vert : this.points) {
+			Point relativeToCentroid = vert.getThisPointRelativeTo(this.position);
+			vert.x = this.position.x + relativeToCentroid.x*Math.cos(theta) - relativeToCentroid.y*Math.sin(theta);
+			vert.y = this.position.y + relativeToCentroid.x*Math.sin(theta) + relativeToCentroid.y*Math.cos(theta);
+		}
+	}
+
+	@Override
+	public List<Point> getPointsOfCollison(Shape other, Vector MTV) {
+				
+		List<Point> toReturn = new ArrayList<Point>();
+		
+		Line thisProj = this.projectOntoVector(MTV);
+		Interval thisInter = new Interval(thisProj, MTV);
+		
+		Line oProj = other.projectOntoVector(MTV);
+		Interval oInter = new Interval(oProj, MTV);
+		
+		Interval overlapInterval = thisInter.getOverlap(oInter);
+		
+		for (Point v : this.points) {
+			Double pointOnInterval = v.toIntervalPoint(MTV);
+			if (overlapInterval.contains(pointOnInterval)) {
+				toReturn.add(v);
+			}
+		}
+		
+		return toReturn;
+		
 	}
 
 

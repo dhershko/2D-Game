@@ -9,7 +9,7 @@ public class MoveRightAction extends HoldAction {
 
 	@Override
 	public void doAction(DynamicObject toDoTo) {
-		toDoTo.xVel += .3;
+		toDoTo.vel.x += .3;
 	}
 	
 	@Override

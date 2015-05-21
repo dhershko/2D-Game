@@ -1,6 +1,7 @@
 package gameReferee;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import gameActions.GameAction;
@@ -11,20 +12,26 @@ public class GameApplet extends PApplet {
 	Referee gameRef;
 	public List<GameAction> actionsToTake;
 	
-	public List<Character> pressedKeys;
+	private  HashMap<Character, Boolean> keysInUse;
 	
 	public GameApplet() {
-		this.pressedKeys = new ArrayList<Character>();
+		this.keysInUse = new HashMap<Character, Boolean>();
+	}
+	
+	public List<Character> getKeysInUse() {
+		List<Character> toReturn = new ArrayList<Character>();
+		for (Character usedChar : keysInUse.keySet()) {
+			if (this.keysInUse.get(usedChar)) toReturn.add(usedChar);
+		}
+		return toReturn;
 	}
 	
 	public void keyPressed() {
-
-		if (!this.pressedKeys.contains(key)) this.pressedKeys.add(key);
+		this.keysInUse.put(key, true);
 	}
 	
 	public void keyReleased() {
-		this.pressedKeys.remove(key);
-
+		this.keysInUse.put(key, false);
 	}
 
 	public void setup() {

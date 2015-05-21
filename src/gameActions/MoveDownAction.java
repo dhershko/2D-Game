@@ -7,8 +7,7 @@ public class MoveDownAction extends HoldAction {
 
 	@Override
 	public void doAction(DynamicObject toDoTo) {
-		toDoTo.yVel += .3;
-		
+		toDoTo.vel.y += .3;
 	}
 	
 	@Override

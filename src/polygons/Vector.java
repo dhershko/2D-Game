@@ -15,6 +15,14 @@ public class Vector {
 	public Vector getPerpVector() {
 		return new Vector(this.y, -this.x);
 	}
+	
+	public Vector add(Vector vect) {
+		return new Vector(this.x + vect.x, this.y + vect.y);
+	}
+	
+	public Vector minus(Vector vect) {
+		return new Vector(this.x- vect.x, this.y - vect.y);
+	}
 
 	public double getLength() {
 		return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
@@ -89,6 +97,16 @@ public class Vector {
 	public String toString() {
 		return "Vector: (" + this.x + ", " + this.y + ")";
 
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Vector) {
+			Vector oCast = (Vector) o;
+			return oCast.x == this.x && oCast.y == this.y;
+		}
+		return false;
+		
 	}
 
 }

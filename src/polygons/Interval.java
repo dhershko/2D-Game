@@ -18,6 +18,14 @@ public class Interval {
 		this.max = Math.max(min, max);
 	}
 	
+	public Interval getOverlap(Interval other) {
+		return new Interval(Math.min(min, other.min), Math.max(max, other.max));
+	}
+	
+	public boolean contains(Double point) {
+		return point >= this.min && point <= this.max;
+	}
+	
 	public Double getMTV(Interval other) {
 		double thisRight = other.max - this.min;
 		double thisLeft = this.max - other.min;
