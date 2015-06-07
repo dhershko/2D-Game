@@ -1,14 +1,14 @@
 package gameActions;
 
-import polygons.Shape;
-import gameObjects.DynamicObject;
+import shapes.Shape;
+import gameObjects.GameObject;
 
 public class RotateC extends HoldAction {
 
 	@Override
-	public void doAction(DynamicObject toDoTo) {
+	public void doAction(GameObject toDoTo) {
 		Shape s = (Shape) toDoTo; 
-		s.rotate(.1);
+		s.rotationalVel += .01;
 	}
 
 }

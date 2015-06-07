@@ -1,25 +1,30 @@
 package gameReferee;
 
 
+import gameActions.ControlScheme;
 import gameActions.GameAction;
 import gameActions.GameActionHelpers;
-import gameObjects.DynamicObject;
 import gameObjects.GameObject;
+import gameObjects.GameObject;
+import geometryHelp.Point;
+import geometryHelp.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import polygons.Point;
-import polygons.Polygon;
-import polygons.Shape;
-import polygons.Vector;
 import processing.core.PApplet;
+import shapes.LineShape;
+import shapes.Polygon;
+import shapes.Shape;
+import shapes.ShapePoint;
 
 public class Referee {
 	//public StaticObject [][] gameGrid;
 	public List<GameObject> gameObjects;
 	public List<GameAction> gameActionsToExecute;
-	public float moveResistance = (float) .99;
+	public float moveResistance = (float) 1;
+
+	public boolean paused;
 
 	public Vector gravity;
 
@@ -29,7 +34,7 @@ public class Referee {
 		this.procApp = gApp;
 		this.gameObjects= new ArrayList<GameObject>();
 		this.gameActionsToExecute = new ArrayList<GameAction>();
-
+		this.paused = false;
 		this.gravity = new Vector(0, 0);
 
 		this.initializeMap();
@@ -72,40 +77,74 @@ public class Referee {
 		points.add(new Point(-30, -55));
 		points.add(new Point(-50, 5));
 
-		double randomVelMag = 5;
+		double randomVelMag = .1;
 
-		addGameObject(new Polygon(this, procApp,GameActionHelpers.getWASDMovementScheme(), 0, 0,  5, 20));
-		for(int i = 0; i < 50; i++) {
+		//		addGameObject(new Polygon(this, procApp,GameActionHelpers.getWASDMovementScheme(), 0, 200,  5, 20));
+
+		//		addGameObject(new ShapePoint(this, this.procApp, 0,0, GameActionHelpers.getWASDMovementScheme()));
+		for(int i = 0; i < 0; i++) {
 			Polygon toAdd = new Polygon(this, procApp,null, procApp.random(procApp.width), procApp.random(procApp.height),  5, 20);
+			double randomTheta = this.procApp.random((float)Math.PI*2);
+			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
+			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
+			addGameObject(toAdd);
+			addGameObject(toAdd);
+
+		}
+		
+		for(int i = 0; i < 50; i++) {
+			ShapePoint toAdd = new ShapePoint(this, procApp, procApp.random(procApp.width), procApp.random(procApp.height), GameActionHelpers.getWASDMovementScheme());
+			double randomTheta = this.procApp.random((float)Math.PI*2);
+			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
+			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
+			addGameObject(toAdd);
+			addGameObject(toAdd);
+		}
+		
+		for(int i = 0; i < 0; i++) {
+			double lineLength = 100;
+			Point p1 = new Point(procApp.random(this.procApp.width), procApp.random(this.procApp.height));
+			double randomTheta1 = this.procApp.random((float)Math.PI*2);
+
+			Point p2 = new Point(p1.x + Math.cos(randomTheta1)*lineLength, p1.y + Math.sin(randomTheta1)*lineLength);
+
+			LineShape toAdd = new LineShape(this, procApp, GameActionHelpers.getWASDMovementScheme(), p1, p2);
 
 			double randomTheta = this.procApp.random((float)Math.PI*2);
 			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
 			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
 			addGameObject(toAdd);
-
 		}
+
+
+		// IZAAK
+		List<Point> big = new ArrayList<Point>() {{
+			add(new Point(200 + 100, 200 + 100));
+			add(new Point(200 + 100, 200 - 100));
+			add(new Point(200 - 100, 200 - 100));
+			add(new Point(200 - 100, 200 + 100));
+		}};
+		Polygon bigP = new Polygon(this, procApp, null, 200, 200, big);
+		addGameObject(bigP);	
+		// IZAAK
 
 	}
 
 	Vector lastAverageVel = new Vector(0,0);
 
 	void timeStep() {
-		this.procApp.stroke(1, 255, 1);
-		List<Character> pressedKeys = this.procApp.getKeysInUse();
-		for (GameObject dyOb: gameObjects) {
-			dyOb.update(pressedKeys);
+		if (!this.paused) {
+			this.procApp.stroke(1, 255, 1);
+			List<Character> pressedKeys = this.procApp.getKeysInUse();
+			for (GameObject dyOb: gameObjects) {
+				dyOb.update(pressedKeys);
+			}
 		}
-//		Vector currAvgVel = this.averageObjectVelocity();
-//		if (!lastAverageVel.equals(currAvgVel)) {
-//			System.out.println(currAvgVel.getLength());
-//		}
-//		lastAverageVel = currAvgVel;
 	}
 
 
 	/*
 	 * TODO:
-	 * points
 	 * lines
 	 * vectors?
 	 * circles

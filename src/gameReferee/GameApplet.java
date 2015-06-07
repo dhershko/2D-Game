@@ -9,7 +9,7 @@ import gameActions.GameActionHelpers;
 import processing.core.PApplet;
 
 public class GameApplet extends PApplet {
-	Referee gameRef;
+	public Referee gameRef = new Referee(this);
 	public List<GameAction> actionsToTake;
 	
 	private  HashMap<Character, Boolean> keysInUse;
@@ -37,7 +37,6 @@ public class GameApplet extends PApplet {
 	public void setup() {
 		size(640, 360);
 		background(0);
-		this.gameRef = new Referee(this);
 		this.noFill();
 	}
 

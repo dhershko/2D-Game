@@ -1,12 +1,12 @@
 package gameActions;
 
-import gameObjects.DynamicObject;
+import gameObjects.GameObject;
 
 public class MoveDownAction extends HoldAction {
 
 
 	@Override
-	public void doAction(DynamicObject toDoTo) {
+	public void doAction(GameObject toDoTo) {
 		toDoTo.vel.y += .3;
 	}
 	

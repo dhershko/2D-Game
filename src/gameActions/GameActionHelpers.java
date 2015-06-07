@@ -15,6 +15,13 @@ public  class GameActionHelpers {
 		HM.put('a', new MoveLeftAction());
 		HM.put('e', new RotateC());
 		HM.put('q', new RotateCC());
+		
+		HM.put('j', new StepLeftAction());
+		HM.put('l', new StepRightAction());
+		HM.put('i', new StepUpAction());
+		HM.put('k', new StepDownAction());
+
+		
 		return new ControlScheme(HM);
 		
 	}

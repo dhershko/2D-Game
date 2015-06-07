@@ -1,10 +1,10 @@
 package gameActions;
 
-import gameObjects.DynamicObject;
+import gameObjects.GameObject;
 
 public abstract class GameAction {	
 	
-	public abstract void doAction(DynamicObject toDoTo);
+	public abstract void doAction(GameObject toDoTo);
 
 	
 	
