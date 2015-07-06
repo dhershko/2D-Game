@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
+import shapes.Circle;
 import shapes.LineShape;
 import shapes.Polygon;
 import shapes.Shape;
@@ -79,28 +80,34 @@ public class Referee {
 
 		double randomVelMag = .1;
 
-		//		addGameObject(new Polygon(this, procApp,GameActionHelpers.getWASDMovementScheme(), 0, 200,  5, 20));
 
-		//		addGameObject(new ShapePoint(this, this.procApp, 0,0, GameActionHelpers.getWASDMovementScheme()));
-		for(int i = 0; i < 0; i++) {
+		// Generic polygons
+		for(int i = 0; i < 15; i++) {
 			Polygon toAdd = new Polygon(this, procApp,null, procApp.random(procApp.width), procApp.random(procApp.height),  5, 20);
 			double randomTheta = this.procApp.random((float)Math.PI*2);
 			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
 			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
 			addGameObject(toAdd);
-			addGameObject(toAdd);
-
 		}
-		
-		for(int i = 0; i < 50; i++) {
+
+		// Controled polygons
+		for(int i = 0; i < 1; i++) {
+			Polygon toAdd = new Polygon(this, procApp,GameActionHelpers.getWASDMovementScheme(), procApp.random(procApp.width), procApp.random(procApp.height),  5, 20);
+			double randomTheta = this.procApp.random((float)Math.PI*2);
+			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
+			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
+			addGameObject(toAdd);
+		}
+		// Controlled Points
+		for(int i = 0; i < 20; i++) {
 			ShapePoint toAdd = new ShapePoint(this, procApp, procApp.random(procApp.width), procApp.random(procApp.height), GameActionHelpers.getWASDMovementScheme());
 			double randomTheta = this.procApp.random((float)Math.PI*2);
 			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
 			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
 			addGameObject(toAdd);
-			addGameObject(toAdd);
 		}
-		
+
+		// Lines
 		for(int i = 0; i < 0; i++) {
 			double lineLength = 100;
 			Point p1 = new Point(procApp.random(this.procApp.width), procApp.random(this.procApp.height));
@@ -116,8 +123,14 @@ public class Referee {
 			addGameObject(toAdd);
 		}
 
+		// Circles
+		for(int i = 0; i < 15; i++) {
+			double radius = 20;
+			Circle toAdd = new Circle(this, procApp,procApp.random(procApp.width), procApp.random(procApp.height), radius, null);
+			addGameObject(toAdd);
+		}
 
-		// IZAAK
+		// Big square
 		List<Point> big = new ArrayList<Point>() {{
 			add(new Point(200 + 100, 200 + 100));
 			add(new Point(200 + 100, 200 - 100));
@@ -125,8 +138,7 @@ public class Referee {
 			add(new Point(200 - 100, 200 + 100));
 		}};
 		Polygon bigP = new Polygon(this, procApp, null, 200, 200, big);
-		addGameObject(bigP);	
-		// IZAAK
+		//addGameObject(bigP);	
 
 	}
 
@@ -145,13 +157,11 @@ public class Referee {
 
 	/*
 	 * TODO:
-	 * lines
-	 * vectors?
-	 * circles
-	 * ellipses
-	 * segments
-	 * concave polygons
-	 * effects
+	 * Ellipses
+	 * Segments
+	 * Concave polygons
+	 * Compound shapes
+	 * Effects
 	 * 
 	 * 
 	 * Fix speed overflow bug

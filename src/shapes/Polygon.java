@@ -4,6 +4,7 @@ import gameActions.ControlScheme;
 import gameObjects.GameObject;
 import gameReferee.GameApplet;
 import gameReferee.Referee;
+import geometryHelp.GeometryHelpers;
 import geometryHelp.Line;
 import geometryHelp.Point;
 import geometryHelp.Vector;
@@ -40,7 +41,16 @@ public class Polygon extends Shape {
 		this.setPositionToCentroid();
 		this.mass = this.getArea();
 	}
-
+/**
+ * 
+ * @param ref
+ * @param gApp
+ * @param cScheme
+ * @param x
+ * @param y
+ * @param numPoints
+ * @param radius
+ */
 	public Polygon(Referee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, int numPoints, double radius) {
 		super(ref, gApp, x, y, cScheme);
 		this.points = new ArrayList<Point>();
@@ -277,6 +287,11 @@ public class Polygon extends Shape {
 	@Override
 	public String toString() {
 		return "Polygon at " + this.position;
+	}
+
+	@Override
+	protected Point getPointOnShapeClosestToPoint(Point otherPoint) {
+		return GeometryHelpers.getPointClosestClosestFromListOfPoints(otherPoint, this.points);
 	}
 
 

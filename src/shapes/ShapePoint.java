@@ -104,4 +104,9 @@ public class ShapePoint extends Shape {
 	protected double getInertia() {
 		return 1;
 	}
+
+	@Override
+	protected Point getPointOnShapeClosestToPoint(Point otherPoint) {
+		return this.toPoint();
+	}
 }

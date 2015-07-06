@@ -29,6 +29,8 @@ public abstract class Shape extends GameObject {
 	protected abstract List<Vector> getCollisionAxis(Shape other);
 
 	protected abstract double getInertia();
+	
+	protected abstract Point getPointOnShapeClosestToPoint(Point otherPoint);
 
 	protected abstract Point getCentroid();
 
@@ -58,7 +60,7 @@ public abstract class Shape extends GameObject {
 
 		//TODO fix this bug so solution isn't hard coded
 		if (pointsOfCollision.isEmpty()) {
-			System.out.println("Shape: no points for collision, consider reducing terminal velocity");			
+//			System.out.println("Shape: no points for collision, consider reducing terminal velocity");			
 			pointsOfCollision.add(this.position);
 			pointsOfCollision.add(other.position);
 		}
@@ -91,19 +93,17 @@ public abstract class Shape extends GameObject {
 
 			if (currentMag == null) return null;
 
-
 			//Render potential MTV vectors
-			//			if (this.cScheme != null)  {
-			//				gApp.stroke(255, 1, 1);
-			//				axis.getUnitVector().timesScalar(currentMag).render(gApp, x, y);
-			//				gApp.stroke(1, 255, 1);
-			//			}
+//						if (this.cScheme != null)  {
+//							gApp.stroke(255, 1, 1);
+//							axis.getUnitVector().timesScalar(currentMag).render(gApp, this.position.x, this.position.y);
+//							gApp.stroke(1, 255, 1);
+//						}
 
 			if (Math.abs(currentMag) < Math.abs(MTVMag)) {
 				MTVMag = currentMag;
 				MTV = axis.getUnitVector();
 			}
-
 			//			if (this == this.ref.players.get(0)) MTV.timesScalar(MTVMag).render(gApp, xPos, yPos);;
 		}
 
@@ -138,9 +138,6 @@ public abstract class Shape extends GameObject {
 
 			Vector MTV = this.collisionMTV(oShape);
 			if (MTV != null) {
-
-				
-				
 				Point pointOfCollision = getPointOfCollison(oShape, MTV);
 				
 				//RENDER POINT OF COLLISION
@@ -155,8 +152,7 @@ public abstract class Shape extends GameObject {
 				oShape.applyImpulse(oImpulse);
 
 
-				//Move objects of one another
-
+				//Move objects off one another
 				Vector thisProjVel = this.vel.getProjection(MTV);
 				Vector otherProjVel = oShape.vel.getProjection(MTV);
 

@@ -36,15 +36,8 @@ public class Impulse {
 
 		Vector linearChange = getLinearComponent();
 		s.vel = s.vel.add(linearChange).timesScalar(1.0/s.mass);
-		//		double changeInRot = this.getChangeInRot();
-		//		this.s.rotationalVel += changeInRot;
-
-
-		//TODO: THIS IS CAUSING IT TO BREAK
 
 		Vector impulseVec = this.getImpulseVec();
-
-		//		s.vel = s.vel.add(impulseVec.getProjection(MTV));
 
 		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
 
@@ -57,10 +50,12 @@ public class Impulse {
 		
 		
 		this.s.rotationalVel += rotVelChange*.017453;//to convert to radians from degrees
+		
+		// Debug for controlled shape
+//		if (this.s.cScheme != null) {
+//			System.out.println("Impulse: " + impulseVec);
+//		}
 
-
-
-		//		impulseVec.render(s.gApp, (float) this.pointOfApp.x, (float)this.pointOfApp.y);
 
 	}
 

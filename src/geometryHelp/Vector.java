@@ -57,6 +57,7 @@ public class Vector {
 
 	public Vector getUnitVector() {
 		double length = this.getLength();
+		if (this.isZero()) return new Vector(0, 0);
 		return new Vector(this.x/length, this.y/length);
 	}
 
@@ -66,6 +67,8 @@ public class Vector {
 
 	public Vector getProjection(Vector toProjectOnto) {
 		double scalarToMultBy = getProjectionScalar(toProjectOnto);
+		//System.out.println("This: " + this);
+		//System.out.println("toProjectOnto: " + toProjectOnto);
 		return toProjectOnto.timesScalar(scalarToMultBy);
 	}
 	
@@ -106,6 +109,8 @@ public class Vector {
 		app.point(x, y);
 		app.popMatrix();
 	}
+	
+
 
 	public void render(GameApplet app, double xOffset, double yOffset) {
 		

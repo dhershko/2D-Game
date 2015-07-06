@@ -6,6 +6,7 @@ import java.util.List;
 import gameActions.ControlScheme;
 import gameReferee.GameApplet;
 import gameReferee.Referee;
+import geometryHelp.GeometryHelpers;
 import geometryHelp.Line;
 import geometryHelp.Point;
 import geometryHelp.Vector;
@@ -87,6 +88,14 @@ public class LineShape extends Shape {
 	@Override
 	public String toString() {
 		return "LineShape from " + p1 + " to " + p2;
+	}
+
+	@Override
+	protected Point getPointOnShapeClosestToPoint(Point otherPoint) {
+		List<Point> linePoints = new ArrayList<Point>();
+		linePoints.add(this.p1);
+		linePoints.add(this.p2);
+		return GeometryHelpers.getPointClosestClosestFromListOfPoints(otherPoint, linePoints);
 	}
 
 }

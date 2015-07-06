@@ -74,6 +74,10 @@ public class Point {
 		return projection.getLength();
 
 	}
+	
+	public Point projectOnto(Vector axis){
+		return this.toVector().getProjection(axis).toPoint();	
+	}
 
 	@Override
 	public String toString() {

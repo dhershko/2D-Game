@@ -69,4 +69,10 @@ public class GameApplet extends PApplet {
 	public void rect(double a, double b, double c, double d) {
 		super.rect((float)a, (float)b, (float)c, (float)d);
 	}
+	
+	public void ellipse(double a, double b, double c, double d) {
+		super.ellipse((float)a, (float)b, (float)c, (float)d);
+		
+	}
+	
 }
