@@ -82,7 +82,7 @@ public class Referee {
 
 
 		// Generic polygons
-		for(int i = 0; i < 15; i++) {
+		for(int i = 0; i < 10; i++) {
 			Polygon toAdd = new Polygon(this, procApp,null, procApp.random(procApp.width), procApp.random(procApp.height),  5, 20);
 			double randomTheta = this.procApp.random((float)Math.PI*2);
 			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
@@ -99,8 +99,16 @@ public class Referee {
 			addGameObject(toAdd);
 		}
 		// Controlled Points
-		for(int i = 0; i < 20; i++) {
+		for(int i = 0; i < 0; i++) {
 			ShapePoint toAdd = new ShapePoint(this, procApp, procApp.random(procApp.width), procApp.random(procApp.height), GameActionHelpers.getWASDMovementScheme());
+			double randomTheta = this.procApp.random((float)Math.PI*2);
+			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
+			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
+			addGameObject(toAdd);
+		}
+		// Points
+		for(int i = 0; i < 0; i++) {
+			ShapePoint toAdd = new ShapePoint(this, procApp, 430, 150 , null);
 			double randomTheta = this.procApp.random((float)Math.PI*2);
 			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
 			toAdd.vel.y = randomVelMag*Math.sin(randomTheta);
@@ -162,7 +170,7 @@ public class Referee {
 	 * Concave polygons
 	 * Compound shapes
 	 * Effects
-	 * 
+	 * Fix impulse bug 
 	 * 
 	 * Fix speed overflow bug
 	 * 

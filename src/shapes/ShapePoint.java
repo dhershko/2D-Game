@@ -56,7 +56,7 @@ public class ShapePoint extends Shape {
 	}
 	
 	public void render(GameApplet gApp) {
-		float renderRadius = 2;
+		double renderRadius = .1;
 		gApp.stroke(1, 255, 1);
 		gApp.pushMatrix();
 

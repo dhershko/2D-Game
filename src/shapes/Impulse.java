@@ -35,7 +35,7 @@ public class Impulse {
 	public void executeImpulse() {		
 
 		Vector linearChange = getLinearComponent();
-		s.vel = s.vel.add(linearChange).timesScalar(1.0/s.mass);
+		s.vel = s.vel.add(linearChange);
 
 		Vector impulseVec = this.getImpulseVec();
 
@@ -49,12 +49,12 @@ public class Impulse {
 		double rotVelChange = ra.crossProduct(impulseVec)/ia;
 		
 		
-		this.s.rotationalVel += rotVelChange*.017453;//to convert to radians from degrees
+		this.s.rotationalVel += rotVelChange;//*.017453;//to convert to radians from degrees
 		
 		// Debug for controlled shape
-//		if (this.s.cScheme != null) {
-//			System.out.println("Impulse: " + impulseVec);
-//		}
+		if (this.s.cScheme != null) {
+			System.out.println("LinearChange: " + linearChange);
+		}
 
 
 	}
@@ -111,8 +111,16 @@ public class Impulse {
 		Double COR = s.coefficentOfRestitution(oS);
 
 		Double velChangeScalar = s.mass*oS.mass*(COR+1)/(s.mass+oS.mass);
+
+		System.out.println("velChangeScalar: " + velChangeScalar);
+		System.out.println("osVelProj: " + oSVelProj);
+		System.out.println("sVelProj: " + sVelProj);
 		
-		return this.oSVelProj.minus(this.sVelProj).timesScalar(velChangeScalar);	
+		Vector toReturn = this.oSVelProj.minus(this.sVelProj).timesScalar(velChangeScalar);	
+		toReturn = toReturn.timesScalar(1.0/s.mass);
+
+		
+		return toReturn; 
 	}
 	
 	public double getAngularComponent(Vector linearComponent) {
