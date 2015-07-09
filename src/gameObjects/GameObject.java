@@ -41,10 +41,10 @@ public abstract class GameObject{
 		this.force = new Vector(0,0);
 
 		//STUFF TO SET LATER
-		this.restitution = 1;
+		this.restitution = .9;
 		this.position = new Point(x, y);
 		this.vel = new Vector(0, 0);
-		this.termVel = 3;
+		this.termVel = 100;
 		this.rotTermVel = .1;
 		this.mass = 1;
 	}	

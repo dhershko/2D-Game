@@ -1,5 +1,7 @@
 package shapes;
 
+import java.math.BigDecimal;
+
 import geometryHelp.Line;
 import geometryHelp.Point;
 import geometryHelp.Vector;
@@ -41,24 +43,21 @@ public class Impulse {
 
 		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
 
-		
-		
-		
-		
+
+
+
+
 		double ia = s.getInertia();
 		double rotVelChange = ra.crossProduct(impulseVec)/ia;
-		
-		
+
+
 		this.s.rotationalVel += rotVelChange;//*.017453;//to convert to radians from degrees
-		
+
 		// Debug for controlled shape
 		if (this.s.cScheme != null) {
 			System.out.println("LinearChange: " + linearChange);
 		}
-
-
 	}
-
 
 	public Vector getVectorOfApplicationRelativeToCentroid(Shape s) {
 		Point cen = s.position;
@@ -108,25 +107,46 @@ public class Impulse {
 	}
 
 	public Vector getLinearComponent() {
-		Double COR = s.coefficentOfRestitution(oS);
+		Double CORd = s.coefficentOfRestitution(oS);
 
-		Double velChangeScalar = s.mass*oS.mass*(COR+1)/(s.mass+oS.mass);
+		Double velChangeScalard = s.mass*oS.mass*(CORd+1)/(s.mass+oS.mass);
 
-		System.out.println("velChangeScalar: " + velChangeScalar);
-		System.out.println("osVelProj: " + oSVelProj);
-		System.out.println("sVelProj: " + sVelProj);
+		Vector toReturnd = this.oSVelProj.minus(this.sVelProj).timesScalar(velChangeScalard);	
+		toReturnd = toReturnd.timesScalar(1.0/s.mass);
 		
-		Vector toReturn = this.oSVelProj.minus(this.sVelProj).timesScalar(velChangeScalar);	
-		toReturn = toReturn.timesScalar(1.0/s.mass);
+//		BigDecimal sMass = BigDecimal.valueOf(s.mass);
+//		BigDecimal oSMass = BigDecimal.valueOf(oS.mass);
+//		BigDecimal COR = BigDecimal.valueOf(s.coefficentOfRestitution(oS));
+//
+//		BigDecimal velChangeScalar = sMass.multiply(oSMass).multiply(COR.add(BigDecimal.ONE))
+//				.divide(sMass.add(oSMass), BigDecimal.ROUND_DOWN);
+//		
+//
+//
+//		BigDecimal osVelProjX = BigDecimal.valueOf(this.oSVelProj.x);
+//		BigDecimal osVelProjY = BigDecimal.valueOf(this.oSVelProj.y);
+//		BigDecimal sVelProjX = BigDecimal.valueOf(this.sVelProj.x);
+//		BigDecimal sVelProjY = BigDecimal.valueOf(this.sVelProj.y);
+//
+//		BigDecimal toReturnX = osVelProjX.subtract(sVelProjX).multiply(velChangeScalar).divide(sMass, BigDecimal.ROUND_DOWN);
+//		BigDecimal toReturnY = osVelProjY.subtract(sVelProjY).multiply(velChangeScalar).divide(sMass, BigDecimal.ROUND_DOWN);
+//		
+////		System.out.println("BigDec: " + velChangeScalar);
+////		System.out.println("Doub: " + velChangeScalard);
+//
+//		Vector toReturn = new Vector(toReturnX.doubleValue(), toReturnY.doubleValue());
+//		
+//		return toReturn;
 
-		
-		return toReturn; 
+
+//
+		return toReturnd; 
 	}
-	
+
 	public double getAngularComponent(Vector linearComponent) {
 		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
 		return ra.crossProduct(linearComponent);
-		
+
 	}
 
 }

@@ -82,7 +82,7 @@ public class Referee {
 
 
 		// Generic polygons
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 20; i++) {
 			Polygon toAdd = new Polygon(this, procApp,null, procApp.random(procApp.width), procApp.random(procApp.height),  5, 20);
 			double randomTheta = this.procApp.random((float)Math.PI*2);
 			toAdd.vel.x = randomVelMag*Math.cos(randomTheta);
@@ -132,7 +132,7 @@ public class Referee {
 		}
 
 		// Circles
-		for(int i = 0; i < 15; i++) {
+		for(int i = 0; i < 0; i++) {
 			double radius = 20;
 			Circle toAdd = new Circle(this, procApp,procApp.random(procApp.width), procApp.random(procApp.height), radius, null);
 			addGameObject(toAdd);
