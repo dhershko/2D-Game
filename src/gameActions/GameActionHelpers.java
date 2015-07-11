@@ -20,6 +20,8 @@ public  class GameActionHelpers {
 		HM.put('l', new StepRightAction());
 		HM.put('i', new StepUpAction());
 		HM.put('k', new StepDownAction());
+		
+		HM.put('\t', new HomeMenuAction());
 
 		
 		return new ControlScheme(HM);

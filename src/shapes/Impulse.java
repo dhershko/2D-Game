@@ -55,7 +55,7 @@ public class Impulse {
 
 		// Debug for controlled shape
 		if (this.s.cScheme != null) {
-			System.out.println("LinearChange: " + linearChange);
+//			System.out.println("LinearChange: " + linearChange);
 		}
 	}
 

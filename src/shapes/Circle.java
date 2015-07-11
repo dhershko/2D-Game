@@ -2,6 +2,7 @@ package shapes;
 
 import gameActions.ControlScheme;
 import gameReferee.GameApplet;
+import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.Line;
 import geometryHelp.Point;
@@ -22,7 +23,7 @@ public class Circle extends Shape {
  * @param radius
  * @param cScheme
  */
-	public Circle(Referee ref, GameApplet gApp, double x, double y, double radius,
+	public Circle(PhysicsReferee ref, GameApplet gApp, double x, double y, double radius,
 			ControlScheme cScheme) {
 		super(ref, gApp, x, y, cScheme);
 		this.radius = radius;

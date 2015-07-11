@@ -4,19 +4,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import menu.MenuHelpers;
 import gameActions.GameAction;
-import gameActions.GameActionHelpers;
 import processing.core.PApplet;
 
 public class GameApplet extends PApplet {
-	public Referee gameRef = new Referee(this);
 	public List<GameAction> actionsToTake;
-	
+	private Referee controllingRef;
 	private  HashMap<Character, Boolean> keysInUse;
-	
-	public GameApplet() {
-		this.keysInUse = new HashMap<Character, Boolean>();
+
+	public Referee getInitialRef() {
+//		PhysicsReferee ref = new PhysicsReferee();
+//		ref.initializeMap(this);
+		Referee ref = MenuHelpers.getTestMenu(this);
+		return ref;
 	}
+	
+	public Referee getControllingRef() {
+		if (this.controllingRef == null) {
+			this.controllingRef = getInitialRef();
+			return this.controllingRef;
+		}
+		return this.controllingRef;
+	}
+	
+	
+//	public GameApplet() {
+//		this.controllingRef = new PhysicsReferee();
+//	}
 	
 	public List<Character> getKeysInUse() {
 		List<Character> toReturn = new ArrayList<Character>();
@@ -26,30 +41,34 @@ public class GameApplet extends PApplet {
 		return toReturn;
 	}
 	
+	
 	public void keyPressed() {
+		if (key == ESC) key='\t';
+		System.out.println(key + " pressed");
 		this.keysInUse.put(key, true);
 	}
 	
 	public void keyReleased() {
 		this.keysInUse.put(key, false);
 	}
+	
+	
 
 	public void setup() {
 		size(640, 360);
+		this.keysInUse = new HashMap<Character, Boolean>();
 		background(0);
 		this.noFill();
 	}
 
 	public void draw() { 
 		background(255);
-		gameRef.timeStep();
-		gameRef.render();
+		Referee nextRef = this.getControllingRef().getNextRef();
+		this.controllingRef.setNextRef(this.controllingRef);
+		this.controllingRef = nextRef;
+		this.getControllingRef().timeStep(this);
+		this.getControllingRef().render(this);
 	}
-
-	public static void main(String[] args) {
-		PApplet.main(new String[] { "--present", GameApplet.class.getName() });
-
-	} 
 
 	public void line(double x1, double y1, double x2, double y2) {
 		super.line((float)x1, (float)y1, (float)x2, (float)y2);		
@@ -73,6 +92,10 @@ public class GameApplet extends PApplet {
 	public void ellipse(double a, double b, double c, double d) {
 		super.ellipse((float)a, (float)b, (float)c, (float)d);
 		
+	}
+
+	public void runGame() {
+		PApplet.main(new String[] { "--present", GameApplet.class.getName() });
 	}
 	
 }

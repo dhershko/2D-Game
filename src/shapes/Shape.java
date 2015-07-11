@@ -3,6 +3,7 @@ package shapes;
 import gameActions.ControlScheme;
 import gameObjects.GameObject;
 import gameReferee.GameApplet;
+import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.Line;
 import geometryHelp.Point;
@@ -19,7 +20,7 @@ public abstract class Shape extends GameObject {
 	float blue = 0;
 	
 
-	public Shape(Referee ref, GameApplet gApp, double x, double y,
+	public Shape(PhysicsReferee ref, GameApplet gApp, double x, double y,
 			ControlScheme cScheme) {
 		super(ref, gApp, x, y, cScheme);
 	}

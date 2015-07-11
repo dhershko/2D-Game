@@ -5,6 +5,7 @@ import java.util.List;
 
 import gameActions.ControlScheme;
 import gameReferee.GameApplet;
+import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.Interval;
 import geometryHelp.Line;
@@ -13,7 +14,7 @@ import geometryHelp.Vector;
 import processing.core.PApplet;
 
 public class ShapePoint extends Shape {
-	public ShapePoint(Referee ref, GameApplet gApp, float x, float y,
+	public ShapePoint(PhysicsReferee ref, GameApplet gApp, float x, float y,
 			ControlScheme cScheme) {
 		super(ref, gApp, x, y, cScheme);
 		this.mass =1;

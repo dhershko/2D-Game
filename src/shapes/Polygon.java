@@ -3,6 +3,7 @@ package shapes;
 import gameActions.ControlScheme;
 import gameObjects.GameObject;
 import gameReferee.GameApplet;
+import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.GeometryHelpers;
 import geometryHelp.Line;
@@ -27,7 +28,7 @@ public class Polygon extends Shape {
 	 * @param cScheme
 	 * @param points
 	 */
-	public Polygon(Referee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, List<Point> points) {
+	public Polygon(PhysicsReferee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, List<Point> points) {
 		super(ref, gApp, x, y, cScheme);
 		this.points = points;
 		if (points.size() < 2) {
@@ -37,7 +38,6 @@ public class Polygon extends Shape {
 				e.printStackTrace();
 			}	
 		}
-		
 		this.setPositionToCentroid();
 		this.mass = this.getArea();
 	}
@@ -51,7 +51,7 @@ public class Polygon extends Shape {
  * @param numPoints
  * @param radius
  */
-	public Polygon(Referee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, int numPoints, double radius) {
+	public Polygon(PhysicsReferee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, int numPoints, double radius) {
 		super(ref, gApp, x, y, cScheme);
 		this.points = new ArrayList<Point>();
 
@@ -190,6 +190,7 @@ public class Polygon extends Shape {
 	@Override
 	public void render(GameApplet gApp) {
 		this.gApp.stroke(red, green, blue);
+		if (this.cScheme != null) {this.gApp.stroke(255, 0, 0);}
 		gApp.pushMatrix();
 		gApp.beginShape();
 		for (Point point : this.points) {

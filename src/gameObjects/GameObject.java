@@ -8,6 +8,7 @@ import shapes.Impulse;
 import gameActions.ControlScheme;
 import gameActions.GameAction;
 import gameReferee.GameApplet;
+import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.Point;
 import geometryHelp.Vector;
@@ -29,10 +30,10 @@ public abstract class GameObject{
 	public double termVel;
 	public double rotTermVel;
 	
-	public Referee ref;
+	public PhysicsReferee ref;
 	public GameApplet gApp;
 	
-	public GameObject(Referee ref, GameApplet gApp, double x, double y, ControlScheme cScheme) {
+	public GameObject(PhysicsReferee ref, GameApplet gApp, double x, double y, ControlScheme cScheme) {
 		this.ref = ref;
 		this.gApp = gApp;
 		this.cScheme = cScheme;

@@ -1,24 +1,18 @@
 package gameReferee;
 
-import processing.core.PApplet;
+import menu.MenuReferee;
 
-public class Game {
-	public Referee ref;
-	public GameApplet app;
+public class Game extends GameApplet {
 
-	public Game() {
-		this.app = new GameApplet();
-		this.ref = new Referee(this.app);
+	@Override
+	public Referee getInitialRef() {
+		PhysicsReferee ref = new PhysicsReferee();
+		ref.initializeMap(this);
+		return ref;
 	}
-
-	public void runGame() {
-		PApplet.main(new String[] { "--present", GameApplet.class.getName() });
-	}
-
-
+	
 	public static void main(String [] args) {
-		Game g = new Game();
+		GameApplet g = new Game();
 		g.runGame();
-		
 	}
 }
