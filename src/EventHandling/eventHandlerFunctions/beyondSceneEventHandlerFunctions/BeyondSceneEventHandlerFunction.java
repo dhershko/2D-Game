@@ -1,0 +1,7 @@
+package EventHandling.eventHandlerFunctions.beyondSceneEventHandlerFunctions;
+
+import EventHandling.eventHandlerFunctions.EventHandlerFunction;
+
+public abstract class BeyondSceneEventHandlerFunction extends EventHandlerFunction {
+
+}

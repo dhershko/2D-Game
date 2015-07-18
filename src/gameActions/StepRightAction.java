@@ -1,13 +1,13 @@
 package gameActions;
 
-import gameObjects.GameObject;
+import gameObjects.Sprite;
 import geometryHelp.Vector;
 
 public class StepRightAction extends HoldAction {
 
 
 	@Override
-	public void doAction(GameObject toDoTo) {
+	public void doAction(Sprite toDoTo) {
 		toDoTo.translate(new Vector(3, 0));
 	}
 	

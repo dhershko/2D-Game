@@ -1,12 +1,12 @@
 package gameActions;
 
-import gameObjects.GameObject;
+import gameObjects.Sprite;
 
 public class MoveDownAction extends HoldAction {
 
 
 	@Override
-	public void doAction(GameObject toDoTo) {
+	public void doAction(Sprite toDoTo) {
 		toDoTo.vel.y += .3;
 	}
 	

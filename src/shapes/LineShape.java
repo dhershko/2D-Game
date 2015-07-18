@@ -3,9 +3,7 @@ package shapes;
 import java.util.ArrayList;
 import java.util.List;
 
-import gameActions.ControlScheme;
-import gameReferee.GameApplet;
-import gameReferee.Referee;
+import topLevel.Renderer;
 import geometryHelp.GeometryHelpers;
 import geometryHelp.Line;
 import geometryHelp.Point;
@@ -15,12 +13,10 @@ public class LineShape extends Shape {
 	Point p1;
 	Point p2;
 
-	public LineShape(Referee ref, GameApplet gApp,
-			ControlScheme cScheme, Point p1, Point p2) {
-		super(ref, gApp, 0, 0, cScheme);
+	public LineShape(Point p1, Point p2) {
+		super(p1.add(p2).timesScalar(1.0/2.0));
 		this.p1 = p1;
 		this.p2 = p2;
-		this.setPositionToCentroid();
 	}
 
 	public Line toLine() {
@@ -46,22 +42,13 @@ public class LineShape extends Shape {
 	}
 
 	@Override
-	protected Point getCentroid() {
+	public Point getCentroid() {
 		return new Point((p1.x+p2.x)/2, (p1.y+p2.y)/2);
 	}
 
 	@Override
-	public void rotate(double theta) {
-		for (Point p : new Point[] {p1, p2}) {
-			Point relativeToCentroid = p.getThisPointRelativeTo(this.position);
-			p.x = this.position.x + relativeToCentroid.x*Math.cos(theta) - relativeToCentroid.y*Math.sin(theta);
-			p.y = this.position.y + relativeToCentroid.x*Math.sin(theta) + relativeToCentroid.y*Math.cos(theta);
-		}
-	}
-
-	@Override
-	public void render(GameApplet gApp) {
-		this.gApp.line(p1.x, p1.y, p2.x, p2.y);
+	public void render(Renderer rend) {
+		rend.rLine(this.toLine());
 	}
 
 	@Override
@@ -79,13 +66,6 @@ public class LineShape extends Shape {
 	}
 	
 	@Override
-	public void translate(Vector vec) {	
-		this.position.translate(vec);
-		p1.translate(vec);
-		p2.translate(vec);
-	}
-	
-	@Override
 	public String toString() {
 		return "LineShape from " + p1 + " to " + p2;
 	}
@@ -97,5 +77,18 @@ public class LineShape extends Shape {
 		linePoints.add(this.p2);
 		return GeometryHelpers.getPointClosestClosestFromListOfPoints(otherPoint, linePoints);
 	}
+
+	@Override
+	public double getArea() {
+		return 1;
+	}
+
+	@Override
+	protected List<Point> getConstituentPoints() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

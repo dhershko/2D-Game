@@ -5,28 +5,31 @@ import java.util.List;
 
 import gameActions.ControlScheme;
 import gameReferee.GameApplet;
-import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.Interval;
 import geometryHelp.Line;
 import geometryHelp.Point;
 import geometryHelp.Vector;
 import processing.core.PApplet;
+import topLevel.Renderer;
 
 public class ShapePoint extends Shape {
-	public ShapePoint(PhysicsReferee ref, GameApplet gApp, float x, float y,
-			ControlScheme cScheme) {
-		super(ref, gApp, x, y, cScheme);
-		this.mass =1;
-	}
-	
-	public  ShapePoint(double x, double y) {
-		super(null, null, x, y, null);
-		this.position.x = x;
-		this.position.y = y;
-		this.mass = 1;
-	}
+//	public ShapePoint(PhysicsReferee ref, GameApplet gApp, float x, float y,
+//			ControlScheme cScheme) {
+//		super(ref, gApp, x, y, cScheme);
+//	}
+//	
+//	public  ShapePoint(double x, double y) {
+//		super(null, null, x, y, null);
+//		this.position.x = x;
+//		this.position.y = y;
+//	}
 
+
+
+	public ShapePoint(Point position) {
+		super(position);
+	}
 
 
 	public Point toPoint() {
@@ -36,12 +39,6 @@ public class ShapePoint extends Shape {
 
 	public Vector toVector() {
 		return new Vector(this.position.x, this.position.y);
-	}
-
-	
-	public void translate(Vector vec) {
-		this.position.x += vec.x;
-		this.position.y += vec.y;
 	}
 
 	public double toIntervalPoint(Vector vec) {
@@ -56,19 +53,20 @@ public class ShapePoint extends Shape {
 
 	}
 	
-	public void render(GameApplet gApp) {
-		double renderRadius = .1;
-		gApp.stroke(1, 255, 1);
-		gApp.pushMatrix();
-
-		
-
-		gApp.translate(this.position.x, this.position.y);
-		gApp.beginShape();
-		
-		gApp.ellipse(0, 0, renderRadius, renderRadius);
-		
-		gApp.popMatrix();
+	public void render(Renderer rend) {
+		rend.rPoint(this.toPoint());
+//		double renderRadius = .1;
+//		gApp.stroke(1, 255, 1);
+//		gApp.pushMatrix();
+//
+//		
+//
+//		gApp.translate(this.position.x, this.position.y);
+//		gApp.beginShape();
+//		
+//		gApp.ellipse(0, 0, renderRadius, renderRadius);
+//		
+//		gApp.popMatrix();
 
 	}
 
@@ -86,12 +84,8 @@ public class ShapePoint extends Shape {
 	}
 
 	@Override
-	protected Point getCentroid() {
+	public Point getCentroid() {
 		return this.toPoint();
-	}
-
-	@Override
-	public void rotate(double theta) {
 	}
 
 	@Override
@@ -109,5 +103,23 @@ public class ShapePoint extends Shape {
 	@Override
 	protected Point getPointOnShapeClosestToPoint(Point otherPoint) {
 		return this.toPoint();
+	}
+
+	@Override
+	public double getMass() {
+		return 1.0;
+	}
+
+
+	@Override
+	protected List<Point> getConstituentPoints() {
+		List<Point> toReturn = new ArrayList<Point>();
+		toReturn.add(position);
+		return toReturn;
+	}
+
+	@Override
+	public double getArea() {
+		return 1;
 	}
 }

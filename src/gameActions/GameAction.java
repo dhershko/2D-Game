@@ -1,10 +1,10 @@
 package gameActions;
 
-import gameObjects.GameObject;
+import gameObjects.Sprite;
 
 public abstract class GameAction {	
 	
-	public abstract void doAction(GameObject toDoTo);
+	public abstract void doAction(Sprite toDoTo);
 
 	
 	

@@ -1,14 +1,13 @@
 package gameActions;
 
 import shapes.Shape;
-import gameObjects.GameObject;
+import gameObjects.Sprite;
 
 public class RotateC extends HoldAction {
 
 	@Override
-	public void doAction(GameObject toDoTo) {
-		Shape s = (Shape) toDoTo; 
-		s.rotationalVel += .01;
+	public void doAction(Sprite toDoTo) {
+		toDoTo.rotationalVel += .01;
 	}
 
 }

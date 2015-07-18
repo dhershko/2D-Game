@@ -2,10 +2,12 @@ package menu;
 
 import gameReferee.GameApplet;
 import gameReferee.Referee;
+import geometryHelp.Point;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import topLevel.Renderer;
 import menu.MenuActions.MenuAction;
 
 public class MenuReferee extends Referee {
@@ -60,11 +62,11 @@ public class MenuReferee extends Referee {
 	
 	
 	@Override
-	public void render(GameApplet gApp) {
+	public void render(Renderer rend) {
 		int textHeight = 30;
-		for (int i = 0; i <menuActions.size(); i++) {
+		for (int i = 0; i < menuActions.size(); i++) {
 			MenuAction currAction = menuActions.get(i);
-			currAction.render(gApp, (i+5)*textHeight, textHeight);
+			currAction.render(rend, (i+5.0)*textHeight, textHeight);
 		}
 	}
 

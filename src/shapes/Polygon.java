@@ -1,9 +1,8 @@
 package shapes;
 
 import gameActions.ControlScheme;
-import gameObjects.GameObject;
+import gameObjects.Sprite;
 import gameReferee.GameApplet;
-import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.GeometryHelpers;
 import geometryHelp.Line;
@@ -12,24 +11,16 @@ import geometryHelp.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import processing.core.PApplet;
+import topLevel.Renderer;
 
 public class Polygon extends Shape {
-
 	public List<Point> points;
 
-	/**
-	 * 
-	 * @param ref
-	 * @param gApp
-	 * @param x
-	 * @param y
-	 * @param cScheme
-	 * @param points
-	 */
-	public Polygon(PhysicsReferee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, List<Point> points) {
-		super(ref, gApp, x, y, cScheme);
+	public Polygon(Point position, List<Point> points) {
+		super(position);
 		this.points = points;
 		if (points.size() < 2) {
 			try {
@@ -39,31 +30,23 @@ public class Polygon extends Shape {
 			}	
 		}
 		this.setPositionToCentroid();
-		this.mass = this.getArea();
 	}
-/**
- * 
- * @param ref
- * @param gApp
- * @param cScheme
- * @param x
- * @param y
- * @param numPoints
- * @param radius
- */
-	public Polygon(PhysicsReferee ref, GameApplet gApp, ControlScheme cScheme, float x, float y, int numPoints, double radius) {
-		super(ref, gApp, x, y, cScheme);
+	
+	public Polygon(Point position, int numPoints, double radius) {
+		super(position);
 		this.points = new ArrayList<Point>();
+		Random rand = new Random();
 
 		//Get vertices
 		float angle = (float) (Math.PI*2 / numPoints);
 		for (float a = 0; a < Math.PI*2; a += angle) {
 
-			float random = (float) (gApp.random((float) .5) + .5);
+			float random = (float) (rand.nextFloat()*.5 + .5);
+
 
 			float vertX = (float) (Math.cos(a) * radius * random);
 			float vertY = (float) (Math.sin(a) * radius * random);
-			points.add(new Point(x+vertX, y+vertY));
+			points.add(new Point(position.x+vertX, position.y+vertY));
 		}
 
 		if (points.size() < 2) {
@@ -73,12 +56,9 @@ public class Polygon extends Shape {
 				e.printStackTrace();
 			}
 		}
-		
+
 		this.setPositionToCentroid();
-		this.mass = this.getArea();
 	}
-
-
 
 	public List<Vector> getVerticesVectorsRelativeToCent() {
 		List<Vector> toReturn = new ArrayList<Vector>();
@@ -188,16 +168,18 @@ public class Polygon extends Shape {
 
 
 	@Override
-	public void render(GameApplet gApp) {
-		this.gApp.stroke(red, green, blue);
-		if (this.cScheme != null) {this.gApp.stroke(255, 0, 0);}
-		gApp.pushMatrix();
-		gApp.beginShape();
-		for (Point point : this.points) {
-			gApp.vertex(point.x, point.y);
-		}
-		gApp.endShape(gApp.CLOSE);
-		gApp.popMatrix();
+	public void render(Renderer rend) {
+		rend.rPolygon(this.points);
+		//		this.gApp.stroke(0);
+		//		this.gApp.fill(red, green, blue);
+		//		if (this.cScheme != null) {this.gApp.stroke(255, 0, 0);}
+		//		gApp.pushMatrix();
+//		gApp.beginShape();
+//		for (Point point : this.points) {
+//			gApp.vertex(point.x, point.y);
+//		}
+//		gApp.endShape(gApp.CLOSE);
+//		gApp.popMatrix();
 //		this.position.render(gApp);;
 	}
 
@@ -209,7 +191,7 @@ public class Polygon extends Shape {
 	}
 
 	@Override
-	protected Point getCentroid() {
+	public Point getCentroid() {
 		double cX = 0;
 		double cY = 0;
 		double A = 0;
@@ -229,25 +211,6 @@ public class Polygon extends Shape {
 		cY *= 1/(6*A);
 		Point toReturn = new Point(cX, cY);
 		return toReturn;
-	}
-	
-	@Override
-	public void translate(Vector vec) {
-		this.position.translate(vec);
-		for(Point vert : this.points) {
-			vert.translate(vec);
-		}
-		
-	}
-
-	@Override
-	public void rotate(double theta) {
-				
-		for (Point vert : this.points) {
-			Point relativeToCentroid = vert.getThisPointRelativeTo(this.position);
-			vert.x = this.position.x + relativeToCentroid.x*Math.cos(theta) - relativeToCentroid.y*Math.sin(theta);
-			vert.y = this.position.y + relativeToCentroid.x*Math.sin(theta) + relativeToCentroid.y*Math.cos(theta);
-		}
 	}
 
 	@Override
@@ -281,7 +244,7 @@ public class Polygon extends Shape {
 		}
 		toReturn += num;
 		toReturn *= 1.0/den;
-		toReturn *= this.mass/6.0;
+		toReturn *= this.getMass()/6.0;
 		return toReturn;
 	}
 	
@@ -295,5 +258,9 @@ public class Polygon extends Shape {
 		return GeometryHelpers.getPointClosestClosestFromListOfPoints(otherPoint, this.points);
 	}
 
+	@Override
+	protected List<Point> getConstituentPoints() {
+		return this.points;
+	}
 
 }

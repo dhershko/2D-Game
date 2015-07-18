@@ -1,11 +1,13 @@
 package gameReferee;
 
+import topLevel.Renderer;
+
 public abstract class Referee {
 	private Referee nextRef;
 	
 	public abstract void timeStep(GameApplet gApp);
 
-	public abstract void render(GameApplet gApp);
+	public abstract void render(Renderer rend);
 	
 	public Referee() {
 		this.nextRef = this;

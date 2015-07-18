@@ -2,7 +2,6 @@ package shapes;
 
 import gameActions.ControlScheme;
 import gameReferee.GameApplet;
-import gameReferee.PhysicsReferee;
 import gameReferee.Referee;
 import geometryHelp.Line;
 import geometryHelp.Point;
@@ -11,7 +10,14 @@ import geometryHelp.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
+import topLevel.Renderer;
+
 public class Circle extends Shape {
+	public Circle(Point position, double rad) {
+		super(position);
+		this.radius = rad;
+	}
+
 	public double radius;
 	
 /**
@@ -23,12 +29,7 @@ public class Circle extends Shape {
  * @param radius
  * @param cScheme
  */
-	public Circle(PhysicsReferee ref, GameApplet gApp, double x, double y, double radius,
-			ControlScheme cScheme) {
-		super(ref, gApp, x, y, cScheme);
-		this.radius = radius;
-		this.mass = Math.PI*Math.pow(this.radius, 2);
-	}
+
 
 	@Override
 	protected Line projectOntoVector(Vector toProjectOnto) {
@@ -64,18 +65,13 @@ public class Circle extends Shape {
 	}
 
 	@Override
-	protected Point getCentroid() {
+	public Point getCentroid() {
 		return this.position;
 	}
 
 	@Override
-	public void rotate(double theta) {
-	}
-
-	@Override
-	public void render(GameApplet gApp) {
-		this.gApp.stroke(red, green, blue);
-		gApp.ellipse(this.position.x, this.position.y, this.radius, this.radius);
+	public void render(Renderer rend) {
+		rend.rCircle(position, radius);
 	}
 
 	@Override
@@ -91,6 +87,19 @@ public class Circle extends Shape {
 		translateCenter.setLength(radius);
 		Point toReturn = new Point(this.position.x, this.position.y);
 		toReturn.translate(translateCenter);
+		return toReturn;
+	}
+
+
+	@Override
+	public double getArea() {
+		return Math.PI*Math.pow(this.radius, 2);
+	}
+
+	@Override
+	protected List<Point> getConstituentPoints() {
+		List<Point> toReturn = new ArrayList<Point>();
+		toReturn.add(position);
 		return toReturn;
 	}
 

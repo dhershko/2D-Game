@@ -2,34 +2,44 @@ package shapes;
 
 import java.math.BigDecimal;
 
+import gameObjects.Sprite;
 import geometryHelp.Line;
 import geometryHelp.Point;
 import geometryHelp.Vector;
 
 public class Impulse {
 
-	Point pointOfApp;
-	Vector MTV;
-	Shape s;
-	Shape oS;
-	Line sProj;
-	Line oSProj;
-	Vector sVelProj;
-	Vector oSVelProj;
-	double oRotVel;
-	double thisRotVel;
+	private Point pointOfApp;
+	private Vector MTV;
+	private Sprite s;
+	private Sprite oS;
+	private Line sProj;
+	private Line oSProj;
+	private Vector sVelProj;
+	private Vector oSVelProj;
+	private double oRotVel;
+	private double thisRotVel;
 
-	public Impulse(Point pointOfApp, Vector MTV, Shape s, Shape oS) {
+	public Impulse(Point pointOfApp, Vector MTV, Sprite s, Sprite oS) {
 		this.pointOfApp = pointOfApp;
 		this.MTV = MTV;
 		this.s = s;
 		this.oS = oS;
-		this.sProj = s.projectOntoVector(MTV);
-		this.oSProj = oS.projectOntoVector(MTV);
-		this.sVelProj = this.s.vel.getProjection(MTV);
-		this.oSVelProj = this.oS.vel.getProjection(MTV);
+		this.sProj = s.hitBox.projectOntoVector(MTV);
+		this.oSProj = oS.hitBox.projectOntoVector(MTV);
+		this.sVelProj = getVelocityProjection(MTV, s.vel, s.rotationalVel, pointOfApp, s.hitBox.getCentroid());
+		this.oSVelProj = getVelocityProjection(MTV, oS.vel, s.rotationalVel, pointOfApp, oS.hitBox.getCentroid());
 		this.oRotVel = oS.rotationalVel;
 		this.thisRotVel = thisRotVel;
+	}
+	
+	private static Vector getVelocityProjection(Vector MTV, Vector vel, double rotVel, Point pointOfApp, Point center) {
+//		Vector radius = pointOfApp.getThisPointRelativeTo(center).toVector();
+//		Vector rotVect = radius.getPerpVector().timesScalar(rotVel);
+//		Vector totalVel = vel.add(rotVect);
+//		
+//		return totalVel.getProjection(MTV);
+		return vel.getProjection(MTV);
 	}
 
 
@@ -43,11 +53,7 @@ public class Impulse {
 
 		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
 
-
-
-
-
-		double ia = s.getInertia();
+		double ia = s.hitBox.getInertia();
 		double rotVelChange = ra.crossProduct(impulseVec)/ia;
 
 
@@ -69,14 +75,14 @@ public class Impulse {
 		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
 		Vector rb =  pointOfApp.getThisPointRelativeTo(oS.position).toVector();
 
-		double ia = s.getInertia();
-		double ib = oS.getInertia();
+		double ia = s.hitBox.getInertia();
+		double ib = oS.hitBox.getInertia();
 
 		Double COR = s.coefficentOfRestitution(oS);
 
 		Vector MTVNorm = MTV.getUnitVector();
 
-		double iMag = -(1+COR)/(1/s.mass+1/s.mass+
+		double iMag = -(1+COR)/(1/s.hitBox.getMass()+1/s.hitBox.getMass()+
 				(Math.pow(ra.getPerpVector().dotProduct(MTVNorm), 2))/ia+
 				(Math.pow(rb.getPerpVector().dotProduct(MTVNorm), 2))/ib);
 
@@ -90,14 +96,14 @@ public class Impulse {
 		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
 		Vector rb =  pointOfApp.getThisPointRelativeTo(oS.position).toVector();
 
-		double ia = s.getInertia();
-		double ib = oS.getInertia();
+		double ia = s.hitBox.getInertia();
+		double ib = oS.hitBox.getInertia();
 
 		Double COR = s.coefficentOfRestitution(oS);
 
 		Vector MTVNorm = MTV.getUnitVector();
 
-		double iMag = -(1+COR)/(1/s.mass+1/oS.mass+
+		double iMag = -(1+COR)/(1/s.hitBox.getMass()+1/oS.hitBox.getMass()+
 				(Math.pow(ra.getPerpVector().dotProduct(MTVNorm), 2))/ia+
 				(Math.pow(rb.getPerpVector().dotProduct(MTVNorm), 2))/ib);
 
@@ -108,11 +114,13 @@ public class Impulse {
 
 	public Vector getLinearComponent() {
 		Double CORd = s.coefficentOfRestitution(oS);
+		double sMass = s.hitBox.getMass();
+		double osMass = oS.hitBox.getMass();
 
-		Double velChangeScalard = s.mass*oS.mass*(CORd+1)/(s.mass+oS.mass);
+		Double velChangeScalard = sMass*osMass*(CORd+1)/(sMass+osMass);
 
 		Vector toReturnd = this.oSVelProj.minus(this.sVelProj).timesScalar(velChangeScalard);	
-		toReturnd = toReturnd.timesScalar(1.0/s.mass);
+		toReturnd = toReturnd.timesScalar(1.0/sMass);
 		
 //		BigDecimal sMass = BigDecimal.valueOf(s.mass);
 //		BigDecimal oSMass = BigDecimal.valueOf(oS.mass);

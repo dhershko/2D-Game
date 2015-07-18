@@ -37,13 +37,19 @@ public class Point {
 	public Point add(Vector vec) {
 		return new Point(x + vec.x, y + vec.y);
 	}
-
+	public Point add(Point p) {
+		return new Point(x + p.x, y + p.y);
+	}
+	public Point timesScalar(double times) {
+		return new Point(x*times, y*times);
+	}
+	
 	public Point getThisPointRelativeTo(Point other) {
 		return new Point(this.x - other.x, this.y - other.y);
 	}
 
 	public ShapePoint toShapePoint() {
-		return new ShapePoint(this.x, this.y);
+		return new ShapePoint(this);
 	}
 
 	public double distanceTo(Point otherPoint) {
@@ -73,6 +79,11 @@ public class Point {
 		//Projection in opposite direction
 		return projection.getLength();
 
+	}
+	public void rotateAround(Point toRotateAround, double theta) {
+			Point relativeToCentroid = this.getThisPointRelativeTo(toRotateAround);
+			this.x = toRotateAround.x + relativeToCentroid.x*Math.cos(theta) - relativeToCentroid.y*Math.sin(theta);
+			this.y = toRotateAround.y + relativeToCentroid.x*Math.sin(theta) + relativeToCentroid.y*Math.cos(theta);
 	}
 	
 	public Point projectOnto(Vector axis){

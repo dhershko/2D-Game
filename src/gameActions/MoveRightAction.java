@@ -1,6 +1,6 @@
 package gameActions;
 
-import gameObjects.GameObject;
+import gameObjects.Sprite;
 
 public class MoveRightAction extends HoldAction {
 
@@ -8,7 +8,7 @@ public class MoveRightAction extends HoldAction {
 
 
 	@Override
-	public void doAction(GameObject toDoTo) {
+	public void doAction(Sprite toDoTo) {
 		toDoTo.vel.x += .3;
 	}
 	

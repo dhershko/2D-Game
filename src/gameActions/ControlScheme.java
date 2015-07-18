@@ -1,18 +1,18 @@
 package gameActions;
 
-import gameObjects.GameObject;
+import gameObjects.Sprite;
 
 import java.util.HashMap;
 
 public class ControlScheme {
 	HashMap<Character, GameAction> actionMap;
-	GameObject toDoTo;
+	Sprite toDoTo;
 	
 	public ControlScheme(HashMap<Character, GameAction> actionMap) {
 		this.actionMap = actionMap;
 	}
 	
-	public void doAction(char input, GameObject toDoTo) {
+	public void doAction(char input, Sprite toDoTo) {
 		GameAction toDo = this.actionMap.get(input);
 		if (toDo != null) {
 			toDo.doAction(toDoTo);

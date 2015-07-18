@@ -1,5 +1,6 @@
 package menu.MenuActions;
 
+import topLevel.Renderer;
 import menu.MenuReferee;
 import gameReferee.GameApplet;
 
@@ -19,14 +20,10 @@ public abstract class MenuAction {
 		this.displayName = displayName;
 	}
 
-	public void render(GameApplet gApp, float vertOffset, float textHeight) {
-		gApp.fill(255, 0, 0);
-		if (isSelected) {
-		gApp.fill(0, 255, 0);
-		}
-		gApp.textAlign(gApp.CENTER);
-		gApp.textFont(gApp.createFont("Arial",textHeight,true));
-		gApp.text(this.displayName, (float) (gApp.width/2.0), vertOffset);
+	public void render(Renderer rend, double vertOffset, double textHeight) {
+		String toDisplay = this.displayName;
+		if (isSelected) toDisplay = "\u21FE" + toDisplay;
+		rend.rText(toDisplay, vertOffset, textHeight);
 	}
 	
 	

@@ -6,16 +6,17 @@ import java.util.List;
 
 import menu.MenuHelpers;
 import gameActions.GameAction;
+import geometryHelp.Line;
+import geometryHelp.Point;
 import processing.core.PApplet;
+import topLevel.Renderer;
 
-public class GameApplet extends PApplet {
+public class GameApplet extends PAppletRenderer implements Renderer  {
 	public List<GameAction> actionsToTake;
 	private Referee controllingRef;
 	private  HashMap<Character, Boolean> keysInUse;
 
 	public Referee getInitialRef() {
-//		PhysicsReferee ref = new PhysicsReferee();
-//		ref.initializeMap(this);
 		Referee ref = MenuHelpers.getTestMenu(this);
 		return ref;
 	}
@@ -28,11 +29,6 @@ public class GameApplet extends PApplet {
 		return this.controllingRef;
 	}
 	
-	
-//	public GameApplet() {
-//		this.controllingRef = new PhysicsReferee();
-//	}
-	
 	public List<Character> getKeysInUse() {
 		List<Character> toReturn = new ArrayList<Character>();
 		for (Character usedChar : keysInUse.keySet()) {
@@ -44,7 +40,6 @@ public class GameApplet extends PApplet {
 	
 	public void keyPressed() {
 		if (key == ESC) key='\t';
-		System.out.println(key + " pressed");
 		this.keysInUse.put(key, true);
 	}
 	
@@ -52,10 +47,8 @@ public class GameApplet extends PApplet {
 		this.keysInUse.put(key, false);
 	}
 	
-	
-
 	public void setup() {
-		size(640, 360);
+		size(640, 360, P2D);
 		this.keysInUse = new HashMap<Character, Boolean>();
 		background(0);
 		this.noFill();
@@ -97,5 +90,5 @@ public class GameApplet extends PApplet {
 	public void runGame() {
 		PApplet.main(new String[] { "--present", GameApplet.class.getName() });
 	}
-	
+
 }
