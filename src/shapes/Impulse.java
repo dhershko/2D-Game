@@ -45,18 +45,15 @@ public class Impulse {
 
 
 	public void executeImpulse() {		
-
+		// Apply linear
 		Vector linearChange = getLinearComponent();
 		s.vel = s.vel.add(linearChange);
 
+		// Apply rotation
 		Vector impulseVec = this.getImpulseVec();
-
-		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
-
+		Vector ra = pointOfApp.getThisPointRelativeTo(s.hitBox.position).toVector();
 		double ia = s.hitBox.getInertia();
 		double rotVelChange = ra.crossProduct(impulseVec)/ia;
-
-
 		this.s.rotationalVel += rotVelChange;//*.017453;//to convert to radians from degrees
 	}
 
@@ -67,8 +64,8 @@ public class Impulse {
 
 	public double getChangeInRot() {
 
-		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
-		Vector rb =  pointOfApp.getThisPointRelativeTo(oS.position).toVector();
+		Vector ra = pointOfApp.getThisPointRelativeTo(s.hitBox.position).toVector();
+		Vector rb =  pointOfApp.getThisPointRelativeTo(oS.hitBox.position).toVector();
 
 		double ia = s.hitBox.getInertia();
 		double ib = oS.hitBox.getInertia();
@@ -88,8 +85,8 @@ public class Impulse {
 	}
 
 	public Vector getImpulseVec() {
-		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
-		Vector rb =  pointOfApp.getThisPointRelativeTo(oS.position).toVector();
+		Vector ra = pointOfApp.getThisPointRelativeTo(s.hitBox.position).toVector();
+		Vector rb =  pointOfApp.getThisPointRelativeTo(oS.hitBox.position).toVector();
 
 		double ia = s.hitBox.getInertia();
 		double ib = oS.hitBox.getInertia();
@@ -147,9 +144,13 @@ public class Impulse {
 	}
 
 	public double getAngularComponent(Vector linearComponent) {
-		Vector ra = pointOfApp.getThisPointRelativeTo(s.position).toVector();
+		Vector ra = pointOfApp.getThisPointRelativeTo(s.hitBox.position).toVector();
 		return ra.crossProduct(linearComponent);
-
+	}
+	
+	@Override
+	public String toString() {
+		return "Impulse with linear component: " + this.getLinearComponent();
 	}
 
 }

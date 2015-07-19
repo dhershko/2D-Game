@@ -27,7 +27,7 @@ public class ShapePoint extends Shape {
 
 
 	public ShapePoint(Point position) {
-		super(position);
+		this.position = position;
 	}
 
 

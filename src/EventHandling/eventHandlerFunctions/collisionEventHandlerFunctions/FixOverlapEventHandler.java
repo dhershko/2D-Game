@@ -32,5 +32,4 @@ public class FixOverlapEventHandler extends CollisionEventHandlerFunction {
 		shape.translate(MTVInDir.timesScalar(1));
 		oShape.translate(MTVOtherDir.timesScalar(1));	
 	}
-
 }

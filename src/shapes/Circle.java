@@ -13,7 +13,7 @@ import topLevel.Renderer;
 
 public class Circle extends Shape {
 	public Circle(Point position, double rad) {
-		super(position);
+		this.position = position;
 		this.radius = rad;
 	}
 
@@ -100,6 +100,11 @@ public class Circle extends Shape {
 		List<Point> toReturn = new ArrayList<Point>();
 		toReturn.add(position);
 		return toReturn;
+	}
+	
+	@Override
+	public String toString() {
+		return "Circle at " + this.position;
 	}
 
 }

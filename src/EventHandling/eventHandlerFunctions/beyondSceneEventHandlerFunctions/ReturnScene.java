@@ -11,17 +11,17 @@ public class ReturnScene extends BeyondSceneEventHandlerFunction{
 	@Override
 	public void handleBeyondSceneEvent(BeyondSceneEvent e) {
 		Sprite s = e.beyondScene;
-		if (s.position.x >= s.ref.sceneWidth)  {
-			s.translate(new Vector(-s.position.x + s.ref.sceneWidth-1, 0));
+		if (s.hitBox.position.x >= s.ref.sceneWidth)  {
+			s.translate(new Vector(-s.hitBox.position.x + s.ref.sceneWidth-1, 0));
 		}
-		else if (s.position.x < 0) {
-			s.translate(new Vector(-(s.position.x), 0));
+		else if (s.hitBox.position.x < 0) {
+			s.translate(new Vector(-(s.hitBox.position.x), 0));
 		}
-		if (s.position.y >= s.ref.sceneHeight)  {
-			s.translate(new Vector(0, -s.position.y+ s.ref.sceneHeight-1));
+		if (s.hitBox.position.y >= s.ref.sceneHeight)  {
+			s.translate(new Vector(0, -s.hitBox.position.y+ s.ref.sceneHeight-1));
 		}
-		else if (s.position.y < 0) {
-			s.translate(new Vector(0, -(s.position.y)));
+		else if (s.hitBox.position.y < 0) {
+			s.translate(new Vector(0, -(s.hitBox.position.y)));
 		}
 	}
 

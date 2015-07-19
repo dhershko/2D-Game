@@ -13,13 +13,12 @@ import java.util.List;
 import topLevel.Renderer;
 
 public abstract class Shape {
-	Point position;
+	public Point position;
 	float red = 0;
 	float green = 255;
 	float blue = 0;
 
-	public Shape(Point position) {
-		this.position = position;
+	public Shape() {
 	}
 
 	protected final void rotateAroundPoint(Point toRotateAround,

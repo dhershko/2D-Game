@@ -2,6 +2,7 @@ package DefaultHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import gameObjects.Sprite;
 import gameReferee.SpriteReferee;
@@ -14,6 +15,7 @@ import shapes.Shape;
 
 public class SpriteRefHelpers {
 	public static void getExample(SpriteReferee ref) {
+
 		// Generic polygons
 		for(int i = 0; i < 0; i++) {
 			addGenericPolySprite(ref);
@@ -23,42 +25,26 @@ public class SpriteRefHelpers {
 		for(int i = 0; i < 1; i++) {
 			addControlledPolySprite(ref);
 		}
-		// Controlled Points
-		for(int i = 0; i < 0; i++) {
-;
-		}
-		// Points
-		for(int i = 0; i < 0; i++) {
-
-		}
-
-		// Lines
-		for(int i = 0; i < 0; i++) {
-
-		}
 
 		// Circles
 		for(int i = 0; i < 0; i++) {
-
+			addCircleSprite(ref);
 		}
 
-		// Big square
-//		List<Point> big = new ArrayList<Point>() {
-//			add(new Point(200 + 100, 200 + 100));
-//			add(new Point(200 + 100, 200 - 100));
-//			add(new Point(200 - 100, 200 - 100));
-//			add(new Point(200 - 100, 200 + 100));
-//		}};
+		// Rectangles
+		for (int i = 0; i < 4; i++) {
+			addRectangle(ref, i);
+		}
 		
 		// Compound shape of circle and poly
-		for(int i = 0; i < 1; i++) {
+		for(int i = 0; i < 0; i++) {
 			addCompoundSprite(ref);
 		}
 	}
 
 	private static void addControlledPolySprite(SpriteReferee ref) {
-		Polygon poly = new Polygon(new Point(150,150),  5, 20);
-		String[] keyWords = new String[]{PropertyKeyWords.COLLIDABLE, PropertyKeyWords.ROUNDSCENE, PropertyKeyWords.CONTROLLED}; 
+		Polygon poly = new Polygon(new Point(200,300),  5, 20);
+		String[] keyWords = new String[]{PropertyKeyWords.COLLIDABLE, PropertyKeyWords.ROUNDSCENE, PropertyKeyWords.CONTROLLED, PropertyKeyWords.COLLIDABLE2}; 
 		new Sprite(keyWords, poly,ref);
 		
 	}
@@ -78,5 +64,27 @@ public class SpriteRefHelpers {
 		String[] keyWords = new String[]{PropertyKeyWords.COLLIDABLE, PropertyKeyWords.ROUNDSCENE}; 
 		CompoundShape cShape = new CompoundShape(allShapes);
 		new Sprite(keyWords, cShape, ref);
+	}
+	
+	public static void addCircleSprite(SpriteReferee ref) {
+		Circle circ = new Circle(new Point(400,300), 20);
+		String[] keyWords = new String[]{PropertyKeyWords.COLLIDABLE2, PropertyKeyWords.ROUNDSCENE}; 
+		Sprite added = new Sprite(keyWords,circ,ref);
+		added.vel.x -= 3;
+	}
+	
+	public static void addRectangle(SpriteReferee ref, int i) {
+		Random rand = new Random();
+		List<Point> rectPs = new ArrayList<Point>();
+		int xOffSet = rand.nextInt(10);
+		int yOffSet = 40*i;
+		int rectWidth = 30;
+		rectPs.add(new Point(xOffSet+100,yOffSet));
+		rectPs.add(new Point(xOffSet+100,yOffSet + rectWidth));
+		rectPs.add(new Point(xOffSet+300, yOffSet + rectWidth));
+		rectPs.add(new Point(xOffSet+300, yOffSet));
+		Polygon rect = new Polygon(rectPs);
+		String[] keyWords = new String[]{PropertyKeyWords.COLLIDABLE, PropertyKeyWords.ROUNDSCENE}; 
+		Sprite added = new Sprite(keyWords, rect, ref);
 	}
 }

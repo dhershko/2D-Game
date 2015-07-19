@@ -22,7 +22,6 @@ import geometryHelp.Point;
 import geometryHelp.Vector;
 
 public class Sprite{
-	public Point position;
 	public Vector vel;
 	public double rotationalVel;
 
@@ -54,7 +53,6 @@ public class Sprite{
 
 		//STUFF TO SET LATER
 		this.restitution = .5;
-		this.position = hitBox.getCentroid();
 		this.vel = new Vector(0, 0);
 		this.termVel = 10;
 		this.rotTermVel = .5;
@@ -125,7 +123,6 @@ public class Sprite{
 	
 
 	public void translate(Vector v) {
-		this.position.translate(v);
 		this.hitBox.translate(v);
 	}
 	protected void rotate(double v) {
@@ -139,16 +136,16 @@ public class Sprite{
 	
 	private List<BeyondSceneEvent> getBeyondSceneEvents() {
 		List<BeyondSceneEvent> toReturn = new ArrayList<BeyondSceneEvent>();
-		if (this.position.x >= this.ref.sceneWidth)  {
+		if (this.hitBox.position.x >= this.ref.sceneWidth)  {
 			toReturn.add(new BeyondRightEvent(this));
 		}
-		else if (this.position.x < 0) {
+		else if (this.hitBox.position.x < 0) {
 			toReturn.add(new BeyondLeftEvent(this));
 		}
-		if (this.position.y >= this.ref.sceneHeight)  {
+		if (this.hitBox.position.y >= this.ref.sceneHeight)  {
 			toReturn.add(new BeyondBotEvent(this));
 		}
-		else if (this.position.y < 0) {
+		else if (this.hitBox.position.y < 0) {
 			toReturn.add(new BeyondTopEvent(this));
 		}
 		

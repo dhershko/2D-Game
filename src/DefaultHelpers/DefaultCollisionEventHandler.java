@@ -17,10 +17,11 @@ public class DefaultCollisionEventHandler extends EventHandler {
 		super();
 		this.addCollisionFunctionToCall(PropertyKeyWords.COLLIDABLE, PropertyKeyWords.COLLIDABLE, new FixOverlapEventHandler());
 		this.addCollisionFunctionToCall(PropertyKeyWords.COLLIDABLE, PropertyKeyWords.COLLIDABLE, new BounceCollisionEventHandler());
+		this.addCollisionFunctionToCall(PropertyKeyWords.COLLIDABLE2, PropertyKeyWords.COLLIDABLE2, new FixOverlapEventHandler());
+		this.addCollisionFunctionToCall(PropertyKeyWords.COLLIDABLE2, PropertyKeyWords.COLLIDABLE2, new BounceCollisionEventHandler());
 		this.addOffSceneFunctionToCall(PropertyKeyWords.ROUNDSCENE, new BounceSceneReturn());
 		this.addWASDMove(PropertyKeyWords.CONTROLLED, .3);
 	}
-	
 	
 	public void addWASDMove(String controlProperty, double velMag) {
 		this.addActionEventHandler(controlProperty, 'd', new VelocitateEast(velMag));

@@ -14,7 +14,6 @@ public class CompoundShape extends Shape {
 	private List<Shape> constituentShapes;
 
 	public CompoundShape(List<Shape> constituentShapes) {
-		super(null);
 		this.constituentShapes = constituentShapes;
 		this.position = this.getCentroid();
 	}

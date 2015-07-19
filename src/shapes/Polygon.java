@@ -18,8 +18,7 @@ import topLevel.Renderer;
 public class Polygon extends Shape {
 	public List<Point> points;
 
-	public Polygon(Point position, List<Point> points) {
-		super(position);
+	public Polygon(List<Point> points) {
 		this.points = points;
 		if (points.size() < 2) {
 			try {
@@ -32,7 +31,6 @@ public class Polygon extends Shape {
 	}
 	
 	public Polygon(Point position, int numPoints, double radius) {
-		super(position);
 		this.points = new ArrayList<Point>();
 		Random rand = new Random();
 
@@ -201,14 +199,28 @@ public class Polygon extends Shape {
 
 			cX += (p1.x + p2.x) * (p1.x*p2.y-p2.x*p1.y);
 			cY += (p1.y+p2.y)*(p1.x*p2.y-p2.x*p1.y);
+
 			
 			A += p1.x*p2.y - p2.x*p1.y;
 		}
 		A *= 1.0/2.0;
-				
-		cX *= 1/(6*A);
-		cY *= 1/(6*A);
-		Point toReturn = new Point(cX, cY);
+
+		Point toReturn = null;
+		// Rectangle special case
+		if (A == 0 && this.points.size() == 4) {
+			double xSum = 0;
+			double ySum = 0;
+			for (Point p : this.points) {
+				xSum += p.x;
+				ySum += p.y;
+			}
+			toReturn = new Point(xSum, ySum).timesScalar(1.0/4.0);
+		}
+		else {
+			cX *= 1/(6*A);
+			cY *= 1/(6*A);
+			toReturn = new Point(cX, cY);
+		}
 		return toReturn;
 	}
 

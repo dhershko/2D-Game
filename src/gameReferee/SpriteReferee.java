@@ -26,7 +26,7 @@ public class SpriteReferee extends Referee {
 	public List<Sprite> sprites;
 	public float moveResistance = (float) 1;
 
-	public double sceneHeight = 300;
+	public double sceneHeight = 200;
 	public double sceneWidth = 600;
 
 	public boolean paused;
@@ -38,7 +38,7 @@ public class SpriteReferee extends Referee {
 	public SpriteReferee(EventHandler cEventHandler) {
 		this.sprites= new ArrayList<Sprite>();
 		this.paused = false;
-		this.gravity = new Vector(0, 0);
+		this.gravity = new Vector(0, .1);
 		SpriteRefHelpers.getExample(this);
 		this.cEventHandler = cEventHandler;
 	}
@@ -46,29 +46,6 @@ public class SpriteReferee extends Referee {
 	public List<Sprite> getPossibleCollidingSprites(Sprite toCheckFor) {
 		return this.sprites;
 	}
-
-
-	private void handleEvent(CollisionEvent event) {
-	}
-
-
-	//	public Vector averageObjectVelocity() {
-	//		Vector toReturn = new Vector(0 ,0);
-	//		for (Sprite dOb : this.sprites) {
-	//			toReturn = toReturn.add(dOb.vel);
-	//		}
-	//		return toReturn.timesScalar(1.0/this.sprites.size());
-	//	}
-	//
-	//	public double averageObjectSpeed() {
-	//		double toReturn = 0;
-	//		for (Sprite dOb : this.sprites) {
-	//			toReturn += dOb.vel.getLength();
-	//		}
-	//		return toReturn/this.sprites.size();
-	//	}
-
-
 
 	@Override
 	public void timeStep(GameApplet gApp) {

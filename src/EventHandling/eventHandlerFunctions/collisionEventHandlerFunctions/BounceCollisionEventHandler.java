@@ -13,9 +13,10 @@ public class BounceCollisionEventHandler extends CollisionEventHandlerFunction {
 				cEvent.s2);
 		Impulse oImpulse = new Impulse(cEvent.pointOfCollision, cEvent.MTV, cEvent.s2,
 				cEvent.s1);
-
+		
 		cEvent.s1.applyImpulse(impulse);
 		cEvent.s2.applyImpulse(oImpulse);
+
 	}
 
 }

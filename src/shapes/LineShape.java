@@ -14,9 +14,9 @@ public class LineShape extends Shape {
 	Point p2;
 
 	public LineShape(Point p1, Point p2) {
-		super(p1.add(p2).timesScalar(1.0/2.0));
 		this.p1 = p1;
 		this.p2 = p2;
+		this.setPositionToCentroid();
 	}
 
 	public Line toLine() {
