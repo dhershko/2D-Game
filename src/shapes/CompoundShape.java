@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import topLevel.Renderer;
-import gameActions.ControlScheme;
 import gameReferee.GameApplet;
-import gameReferee.PhysicsReferee;
 import geometryHelp.GeometryHelpers;
 import geometryHelp.Line;
 import geometryHelp.Point;
@@ -15,19 +13,28 @@ import geometryHelp.Vector;
 public class CompoundShape extends Shape {
 	private List<Shape> constituentShapes;
 
-	public CompoundShape(PhysicsReferee ref, GameApplet gApp, double x,
-			double y, ControlScheme cScheme, List<Shape> constituentShapes) {
-		super(ref, gApp, x, y, cScheme);
+	public CompoundShape(List<Shape> constituentShapes) {
+		super(null);
+		this.constituentShapes = constituentShapes;
 		this.position = this.getCentroid();
 	}
 
 	@Override
 	protected Line projectOntoVector(Vector toProjectOnto) {
-		//TODO
-		for (Shape currShape : constituentShapes) {
-			Line currProj = currShape.projectOntoVector(toProjectOnto);
-			currProj.getFurtherLeftPoint(toProjectOnto);
+		//TODO implement -- pretty sure it's not used since getMTV is overrriden
+		return new Line(new Point(0,0), new Point(1, 1));
+	}
+
+	@Override
+	public Vector getMTV(Shape otherShape) {
+		Vector toReturn = null;
+		for (Shape currShape: this.constituentShapes) {
+			Vector currMTV = currShape.getMTV(otherShape);
+			if (currMTV != null && (toReturn == null || currMTV.getLength() < toReturn.getLength())) {
+				toReturn = currMTV;
+			}
 		}
+		return toReturn;
 	}
 
 	@Override
@@ -66,18 +73,14 @@ public class CompoundShape extends Shape {
 		return toReturn.timesScalar(1.0/this.getMass());
 	}
 
-	@Override
-	public void rotateAroundPoint(Point point, double theta) {
-		for (Shape currShape : this.constituentShapes) {
-			currShape.rotateAroundPoint(point, theta);
-		}
-	}
+
 
 	@Override
 	public void render(Renderer rend) {
 		for (Shape currShape : this.constituentShapes) {
 			currShape.render(rend);
 		}
+		this.position.toShapePoint().render(rend);
 	}
 
 	@Override
@@ -94,6 +97,24 @@ public class CompoundShape extends Shape {
 		double toReturn = 0.0;
 		for (Shape currShape : this.constituentShapes) {
 			toReturn += currShape.getMass();
+		}
+		return toReturn;
+	}
+
+	@Override
+	protected List<Point> getConstituentPoints() {
+		List<Point> toReturn = new ArrayList<Point>();
+		for (Shape currShape : this.constituentShapes) {
+			toReturn.addAll(currShape.getConstituentPoints());
+		}
+		return toReturn;
+	}
+
+	@Override
+	public double getArea() {
+		double toReturn = 0;
+		for (Shape currShape : this.constituentShapes) {
+			toReturn += currShape.getArea();
 		}
 		return toReturn;
 	}

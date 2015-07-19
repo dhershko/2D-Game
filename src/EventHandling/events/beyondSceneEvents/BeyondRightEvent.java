@@ -8,5 +8,4 @@ public class BeyondRightEvent extends BeyondSceneEvent {
 	public BeyondRightEvent(Sprite beyond) {
 		super(beyond);
 	}
-
 }

@@ -9,4 +9,5 @@ public class BeyondBotEvent extends BeyondSceneEvent{
 		super(beyond);
 	}
 
+
 }

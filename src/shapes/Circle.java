@@ -1,6 +1,5 @@
 package shapes;
 
-import gameActions.ControlScheme;
 import gameReferee.GameApplet;
 import gameReferee.Referee;
 import geometryHelp.Line;

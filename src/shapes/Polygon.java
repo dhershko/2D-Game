@@ -1,6 +1,5 @@
 package shapes;
 
-import gameActions.ControlScheme;
 import gameObjects.Sprite;
 import gameReferee.GameApplet;
 import gameReferee.Referee;

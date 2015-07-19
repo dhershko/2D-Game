@@ -4,12 +4,13 @@ import gameObjects.Sprite;
 import geometryHelp.Vector;
 import EventHandling.eventHandlerFunctions.collisionEventHandlerFunctions.CollisionEventHandlerFunction;
 import EventHandling.events.CollisionEvent;
+import EventHandling.events.beyondSceneEvents.BeyondSceneEvent;
 
 public class RoundSceneReturn extends BeyondSceneEventHandlerFunction{
 
 	@Override
-	public void handleCollisionEvent(CollisionEvent cEvent) {
-		Sprite s = cEvent.s1;
+	public void handleBeyondSceneEvent(BeyondSceneEvent event) {
+		Sprite s = event.beyondScene;
 		if (s.position.x >= s.ref.sceneWidth)  {
 			s.translate(new Vector(-(s.position.x), 0));
 		}

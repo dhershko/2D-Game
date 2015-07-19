@@ -3,7 +3,6 @@ package geometryHelp;
 import java.util.ArrayList;
 import java.util.List;
 
-import gameActions.ControlScheme;
 import gameReferee.GameApplet;
 import gameReferee.Referee;
 import processing.core.PApplet;

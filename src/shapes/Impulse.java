@@ -58,11 +58,6 @@ public class Impulse {
 
 
 		this.s.rotationalVel += rotVelChange;//*.017453;//to convert to radians from degrees
-
-		// Debug for controlled shape
-		if (this.s.cScheme != null) {
-//			System.out.println("LinearChange: " + linearChange);
-		}
 	}
 
 	public Vector getVectorOfApplicationRelativeToCentroid(Shape s) {

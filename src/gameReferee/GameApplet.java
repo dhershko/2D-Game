@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import menu.MenuHelpers;
-import gameActions.GameAction;
 import geometryHelp.Line;
 import geometryHelp.Point;
 import processing.core.PApplet;
 import topLevel.Renderer;
 
 public class GameApplet extends PAppletRenderer implements Renderer  {
-	public List<GameAction> actionsToTake;
 	private Referee controllingRef;
 	private  HashMap<Character, Boolean> keysInUse;
 
